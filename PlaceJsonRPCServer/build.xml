@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<project name="Manually built JsonRPC http server for places."
+         default="targets">
+   <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+   <property name="src.dir" value="src"/>
+   <property name="classes.dir" value="classes"/>
+   <property name="lib.dir" value="lib"/>
+   <property name="port.num.places" value="8080"/>
+   <property environment="env"/>
+   <property name="ostype" value="${env.OSTYPE}"/>
+
+   <target name="targets">
+      <echo message="Targets are execute.place.server, targets"/>
+      <echo message="base directory is: ${basedir}"/>
+      <echo message="invoke jsonrpc place server with: java -jar lib/placeserver.jar ${port.num.places}"/>
+      <echo message="or with: java -cp classes:lib/json.jar ser423.geo.server.PlaceServer ${port.num.places}"/>
+   </target>
+
+   <target name="execute.place.server"
+           description="execute the jsonRPC place server">
+      <echo message="java -jar lib/jsonrpcserver.jar ${port.num.places}"/>
+      <java jar="${lib.dir}/placeserver.jar"
+            fork="yes">
+         <arg value="${port.num.places}"/>
+      </java>
+   </target>
+
+</project>
