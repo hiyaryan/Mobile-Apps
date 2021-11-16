@@ -17,8 +17,8 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
     var names: [String] = []
     
     // This variable is updated on prepare segue from PlaceDescriptionController
-    var place: [String: Any]?
-    var places: Dictionary<String, Any>?
+    var place: Dictionary<String, Any>?
+    var places: Dictionary<String, Dictionary<String, Any>>?
     
     var selection: String?
     
@@ -26,48 +26,80 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
         tableView.dataSource = self
         tableView.delegate = self
         
-        print("\nPlaceListingsController:\n\tviewDidLoad\n")
+        print("PlaceListingsController:\n\tviewDidLoad\n")
         // Do any additional setup after loading the view.
         
-        if let path = Bundle.main.path(forResource: "places", ofType: "json") {
+        // Read places.json in the Caches directory
+        // Convert the places json object to a dictionary.
+        if let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            let file = url.appendingPathComponent("places").appendingPathExtension("json")
+            
             do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path))
-                places = try JSONSerialization.jsonObject(with: data) as? Dictionary<String, Any>
-                
-                for place in places! {
-                    names.append(place.key)
-                }
+                places = try JSONSerialization.jsonObject(with: Data(contentsOf: file)) as? Dictionary<String, Dictionary<String, Any>>
             } catch {
-                print("Error parsing file.")
+                print("Error reading file.\n")
             }
-        } else {
-            print("File not found.")
+            
+            // Set the names String array with the keys from places used to set the cells in the table view
+            for place in places! {
+                names.append(place.key)
+            }
         }
     }
 
     // This method is called when this view is transitioning into the foreground.
     // Action: Transition from Place Description to Place Listings.
     override func viewWillAppear(_ animated: Bool) {
-        print("\nPlaceListingsController:\n\tviewWillAppear\n")
-        print(place?["description"] as! String)
+        print("PlaceListingsController:\n\tviewWillAppear\n")
+        
+        // Find the name of the selected place in the places dictionary
+        for p in places! {
+            if p.key == place!["name"] as! String {
+                // If the description of the place is not matching the description of the place in the places dictionary
+                // update the description in the places.json file.
+                if (places![p.key]!["description"]! as! String) != (place!["description"]! as! String) {
+                    
+                    // Set the description of the place in the places dictionary to the selected place's description
+                    places![p.key]!["description"]! = place!["description"]!
+                    
+                    // Access places.json in the Caches directory
+                    // Convert the places dictionary into a json object and write to the file.
+                    do {
+                        if let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+                            let file = url.appendingPathComponent("places").appendingPathExtension("json")
+                            
+                            try JSONSerialization.data(withJSONObject: places!, options: [.prettyPrinted])
+                                .write(to: file, options: [.atomicWrite])
+                            
+                            print("Updated file.\n\t\(place!["name"] as! String): {description: \(place!["description"]! as! String)}\n")
+                        }
+                    } catch {
+                        print("Error writing to file.\n")
+                    }
+                } else {
+                    print("No changes detected.\n")
+                }
+                break
+            }
+        }
     }
     
     // This method is called when this view successfuly opens into the foreground.
     // Action: Transition from Place Description to Place Listings.
     override func viewDidAppear(_ animated: Bool) {
-        print("\nPlaceListingsController:\n\tviewDidAppear\n")
+        print("PlaceListingsController:\n\tviewDidAppear\n")
     }
     
     // This method is called when this view is transitioning into the background.
     // Action: Transition to Place Description from Place Listings.
     override func viewWillDisappear(_ animated: Bool) {
-        print("\nPlaceListingsController:\n\tviewWillDisappear\n")
+        print("PlaceListingsController:\n\tviewWillDisappear\n")
     }
     
     // This method is called when this view sucessfully goes into the background.
     // Action: Transition to Place Description from Place Listings.
     override func viewDidDisappear(_ animated: Bool) {
-        print("\nPlaceListingsController:\n\tviewDidDisappear\n")
+        print("PlaceListingsController:\n\tviewDidDisappear\n")
     }
     
     // Receives the number of rows in the TableView
@@ -89,7 +121,7 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
         
         for jsonPlace in places! {
             if jsonPlace.key == selection {
-                place = jsonPlace.value as? Dictionary<String, Any>
+                place = jsonPlace.value
                 break
             }
         }

@@ -13,12 +13,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    // On launch, copy places.json from bundle to Caches directory.
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         // This method is called when the app is launched.
         // Action: Launch app from the home screen
-        print("\nAppDelegate:\n\tdidFinishLaunchingWithOptions\n")
+        print("AppDelegate:\n\tdidFinishLaunchingWithOptions\n")
+        
+        // Set places url to places.json resource in bundle
+        let places = Bundle.main.url(forResource: "places", withExtension: "json")!
+        
+        // Set url to Caches directory where places.json will be copied to
+        let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("places.json", isDirectory: false)
+        
+        // If places.json already exists, it will not be overwritten
+        do {
+            try FileManager.default.copyItem(at: places, to: url)
+            print("Successfully copied file to Caches directory.\n")
+        }
+        catch {
+            print("File exists in Caches directory.\n")
+        }
         
         return true
     }
@@ -29,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called at the instant the app undergoes entry into the background or is disrupted.
         // Action: Press the home button.
-        print("\nAppDelegate:\n\tapplicationWillResignActive\n")
+        print("AppDelegate:\n\tapplicationWillResignActive\n")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -38,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the app enters into the background.
         // Action: Press the home button to leave the app.
-        print("\nAppDelegate:\n\tapplicationDidEnterBackground\n")
+        print("AppDelegate:\n\tapplicationDidEnterBackground\n")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -46,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the app is reopened from the background into the foreground.
         // Action: Double click the home button and reopen app.
-        print("\nAppDelegate:\n\tapplicationWillEnterForeground\n")
+        print("AppDelegate:\n\tapplicationWillEnterForeground\n")
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -54,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called at the instant the app enters into the foreground.
         // Action: Launch or open the app.
-        print("\nAppDelegate:\n\tapplicationDidBecomeActive\n")
+        print("AppDelegate:\n\tapplicationDidBecomeActive\n")
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -62,6 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the application is terminated.
         // Action: Double click the home button and swipe up on the app to close it.
-        print("\nAppDelegate:\n\tapplicationWillTerminate\n")
+        print("AppDelegate:\n\tapplicationWillTerminate\n")
     }
 }

@@ -68,7 +68,7 @@ class PlaceDescriptionController: UIViewController, UITextViewDelegate {
     // This method is called when this view is transitioning into the foreground.
     // Action: Transition from Place Listings to Place Description.
     override func viewWillAppear(_ animated: Bool) {
-        print("\nPlaceDescriptionController:\n\tviewWillAppear\n")
+        print("PlaceDescriptionController:\n\tviewWillAppear\n")
         
         let name: String? = (place["name"] as! String)
         nameButton.setTitle(name!, for: .normal)
@@ -98,28 +98,30 @@ class PlaceDescriptionController: UIViewController, UITextViewDelegate {
     // This method is called when this view successfuly opens into the foreground.
     // Action: Transition from Place Listings to Place Description.
     override func viewDidAppear(_ animated: Bool) {
-        print("\nPlaceDescriptionController:\n\tviewDidAppear\n")
+        print("PlaceDescriptionController:\n\tviewDidAppear\n")
     }
     
     // This method is called when this view is transitioning into the background.
     // Action: Transition to Place Listings from Place Description.
     override func viewWillDisappear(_ animated: Bool) {
-        print("\nPlaceDescriptionController:\n\tviewWillDisappear\n")
+        print("PlaceDescriptionController:\n\tviewWillDisappear\n")
         
     }
     
     // This method is called when this view sucessfully goes into the background.
     // Action: Transition to Place Listings from Place Description.
     override func viewDidDisappear(_ animated: Bool) {
-        print("\nPlaceDescriptionController:\n\tviewDidDisappear\n")
+        print("PlaceDescriptionController:\n\tviewDidDisappear\n")
     }
     
+    // Prepare for segue from this (PlaceDescription) View to PlaceListings View
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let placeListings = segue.destination as? PlaceListingsController {
             placeListings.place = self.place
         }
     }
     
+    // Prepare for segue from PlaceListings View to this (PlaceDescription) View
     @IBAction func savePlace(segue: UIStoryboardSegue) {
         let placeListingsController = segue.source as! PlaceListingsController        
         place = placeListingsController.place!
