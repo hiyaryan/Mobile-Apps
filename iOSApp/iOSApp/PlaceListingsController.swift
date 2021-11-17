@@ -126,4 +126,31 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
             }
         }
     }
+    
+    // Delete a cell on the TableView and from places.json file.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let name = names.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            places!.removeValue(forKey: name)
+            print("Deleted \(name).\n")
+            
+        } else if editingStyle == .insert {
+            
+        }
+        
+        // Access places.json in the Caches directory
+        // Convert the places dictionary into a json object and write to the file.
+        do {
+            if let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+                let file = url.appendingPathComponent("places").appendingPathExtension("json")
+                
+                try JSONSerialization.data(withJSONObject: places!, options: [.prettyPrinted])
+                    .write(to: file, options: [.atomicWrite])
+            }
+        } catch {
+            print("Error writing to file.\n")
+        }
+    }
 }
