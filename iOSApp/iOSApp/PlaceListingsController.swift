@@ -15,6 +15,7 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
     
     // This variable is used to populate the cells in the TableView
     var names: [String] = []
+    var isNewPlace: Bool = false
     
     // This variable is updated on prepare segue from PlaceDescriptionController
     var place: Dictionary<String, Any>?
@@ -23,6 +24,8 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
     var selection: String?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -40,9 +43,33 @@ class PlaceListingsController: UIViewController, UITableViewDataSource, UITableV
                 print("Error reading file.\n")
             }
             
+            // If isNewPlace is true add the place to places
+            if isNewPlace {
+                places!.updateValue(place!, forKey: place!["name"] as! String)
+                
+                // Access places.json in the Caches directory
+                // Convert the places dictionary into a json object and write to the file.
+                do {
+                    if let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+                        let file = url.appendingPathComponent("places").appendingPathExtension("json")
+                        
+                        try JSONSerialization.data(withJSONObject: places!, options: [.prettyPrinted])
+                            .write(to: file, options: [.atomicWrite])
+                        
+                        print("Updated file.\n\tAdded \(place!["name"] as! String) to places.\n")
+                    }
+                } catch {
+                    print("Error writing to file.\n")
+                }
+                
+                // Set isNewPlace to false once the place is added to places
+                // Note this is only set to true from the PlaceAdder View
+                isNewPlace = false
+            }
+            
             // Set the names String array with the keys from places used to set the cells in the table view
-            for place in places! {
-                names.append(place.key)
+            for p in places! {
+                names.append(p.key)
             }
         }
     }
