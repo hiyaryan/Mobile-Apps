@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the app is launched.
         // Action: Launch app from the home screen
-        print("AppDelegate:\n\tdidFinishLaunchingWithOptions\n")
+        NSLog("AppDelegate: didFinishLaunchingWithOptions\n")
         
         // Set places url to places.json resource in bundle
         let places = Bundle.main.url(forResource: "places", withExtension: "json")!
@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called at the instant the app undergoes entry into the background or is disrupted.
         // Action: Press the home button.
-        print("AppDelegate:\n\tapplicationWillResignActive\n")
+        NSLog("AppDelegate: applicationWillResignActive\n")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the app enters into the background.
         // Action: Press the home button to leave the app.
-        print("AppDelegate:\n\tapplicationDidEnterBackground\n")
+        NSLog("AppDelegate: applicationDidEnterBackground\n")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -63,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the app is reopened from the background into the foreground.
         // Action: Double click the home button and reopen app.
-        print("AppDelegate:\n\tapplicationWillEnterForeground\n")
+        NSLog("AppDelegate: applicationWillEnterForeground\n")
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called at the instant the app enters into the foreground.
         // Action: Launch or open the app.
-        print("AppDelegate:\n\tapplicationDidBecomeActive\n")
+        NSLog("AppDelegate: applicationDidBecomeActive\n")
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -79,6 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // This method is called when the application is terminated.
         // Action: Double click the home button and swipe up on the app to close it.
-        print("AppDelegate:\n\tapplicationWillTerminate\n")
+        NSLog("AppDelegate: applicationWillTerminate\n")
     }
 }

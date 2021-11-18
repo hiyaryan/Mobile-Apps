@@ -1,28 +1,4 @@
 {
-"ASU-Brickyard" :
-    {
-        "address-title" : "ASU CIDSE",
-        "address-street" : "699 S Mill Ave,\nTempe, AZ 85281",
-        "elevation" : 1300.0,
-        "latitude" : 33.423883,
-        "longitude" : -111.939548,
-        "name" : "ASU-Brickyard",
-        "image" : "brickyard",
-        "description" : "Home of ASU's CS, CE, and IE programs",
-        "category" : "School"
-    },
-"ASU-Poly" : 
-  {
-    "address-title" : "ASU Software Engineering",
-    "address-street" : "7171 E Sonoran Arroyo Mall$Peralta Hall 230$Mesa AZ 85212",
-    "elevation" : 1300.0,
-    "latitude" : 33.306388,
-    "longitude" : -111.679121,
-    "name" : "ASU-Poly",
-    "image" : "asupoly",
-    "description" : "Home of ASUs Software Engineering Programs",
-    "category" : "School"
-  },
   "ASU-West" : 
   {
     "address-title" : "ASU West Campus",
@@ -100,8 +76,8 @@
     "address-title" : "Courtyard Moscow City Center",
     "address-street" : "Voznesenskiy per 7 $ Moskva Russia 125009",
     "elevation" : 512.0,
-    "latitude" : 55.758087,
-    "longitude" : 37.604042,
+    "latitude" : 55.758666,
+    "longitude" : 37.604058,
     "name" : "Moscow-Russia",
     "image" : "moscow",
     "description" : "The Marriott Courtyard in downtown Moscow",

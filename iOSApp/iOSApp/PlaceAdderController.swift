@@ -60,13 +60,14 @@ class PlaceAdderController: UIViewController, UITextViewDelegate, UITextFieldDel
         longitudeTextField.delegate = self
         longitudeTextField.accessibilityLabel = "longitude"
         
+        NSLog("PlaceAdderController: viewDidLoad\n")
         // Do any additional setup after loading the view.
     }
     
     // Images are not used in this project, before view disappears set the image
     // element to N/A.
     override func viewWillDisappear(_ animated: Bool) {
-        place["image"] = "N/A"
+        NSLog("PlaceAdderController: viewWillDisappear\n")
     }
     
     // This function updates the Description field

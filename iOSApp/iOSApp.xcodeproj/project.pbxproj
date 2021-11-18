@@ -15,6 +15,7 @@
 		94B5EEEF2730E4A7002FA8F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94B5EEEE2730E4A7002FA8F3 /* Assets.xcassets */; };
 		94B5EEF22730E4A7002FA8F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94B5EEF02730E4A7002FA8F3 /* LaunchScreen.storyboard */; };
 		94E323DD274569D80079D657 /* PlaceAdderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E323DC274569D80079D657 /* PlaceAdderController.swift */; };
+		94E323DF2745CF940079D657 /* ServerInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94E323DE2745CF940079D657 /* ServerInfo.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		94B5EEF12730E4A7002FA8F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94B5EEF32730E4A7002FA8F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94E323DC274569D80079D657 /* PlaceAdderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceAdderController.swift; sourceTree = "<group>"; };
+		94E323DE2745CF940079D657 /* ServerInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = ServerInfo.plist; path = iOSApp/ServerInfo.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +46,7 @@
 		94B5EEDB2730E4A6002FA8F3 = {
 			isa = PBXGroup;
 			children = (
+				94E323DE2745CF940079D657 /* ServerInfo.plist */,
 				946850F72744362400E9F717 /* places.json */,
 				94B5EEE62730E4A6002FA8F3 /* iOSApp */,
 				94B5EEE52730E4A6002FA8F3 /* Products */,
@@ -131,6 +134,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94E323DF2745CF940079D657 /* ServerInfo.plist in Resources */,
 				946850F82744362400E9F717 /* places.json in Resources */,
 				94B5EEF22730E4A7002FA8F3 /* LaunchScreen.storyboard in Resources */,
 				94B5EEEF2730E4A7002FA8F3 /* Assets.xcassets in Resources */,
