@@ -1,24 +1,21 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * Main Activity (MainActivity.java)
- * This is the main activity controller.
+ * Alert Activity (AlertActivity.java)
+ * This is the alert activity controller.
  *
  * @author Ryan Meneses
  * @version 1.0
  * @since November 19, 2021
  */
-public class MainActivity extends AppCompatActivity {
-
+public class AlertActivity extends AppCompatActivity {
     /**
      * onCreate
      * This method initializes the view.
@@ -27,35 +24,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        final TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-        descriptionTextView.setMovementMethod(new ScrollingMovementMethod());
+        Intent intent = getIntent();
+        String value = intent.getStringExtra("AlertActivity");
 
-        final TextView addressStreetTextView = findViewById(R.id.addressStreetTextView);
-        addressStreetTextView.setMovementMethod(new ScrollingMovementMethod());
-
-        final Button nameButton = findViewById(R.id.nameButton);
-        nameButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-            }
-        });
-
-        final Button testButton = findViewById(R.id.testButton);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AlertActivity.class);
-                intent.putExtra("AlertActivity", "Hello Android Developer");
-                MainActivity.this.startActivity(intent);
-            }
-        });
+        new AlertDialog.Builder(AlertActivity.this)
+                .setTitle("Alert")
+                .setMessage(value)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(AlertActivity.this, MainActivity.class);
+                        AlertActivity.this.startActivity(intent);
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     /**
      * onRestart
      * This method is called when the app is opened from the background.
-     * Action: From the MainActivity view send the app into the background and reopen.
+     * Action: From the AlertActivity view send the app into the background and reopen.
      */
     @Override
     protected void onRestart() {
@@ -66,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * onStart
      * This method is called when the view is called into the foreground.
-     * Action: Open the app into the MainActivity view.
+     * Action: Press TEST and wait for AlertActivity view to enter the foreground.
      */
     @Override
     protected void onStart() {
@@ -77,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * onResume
      * This method is called when the view returns to the foreground.
-     * Action: Press OK from the AlertActivity view.
+     * Action: Press TEST from the MainActivity view.
      */
     @Override
     protected void onResume() {
@@ -88,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * onPause
      * This method is called when the view is set to change.
-     * Action: Press the TEST button.
+     * Action: Press the OK button.
      */
     @Override
     protected void onPause() {
@@ -99,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * onStop
      * This method is called when the view has changed.
-     * Action: Press the TEST button and wait for AlertActivity view to display.
+     * Action: Press the OK button and wait for MainActivity view to display.
      */
     @Override
     protected void onStop() {
@@ -110,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * onDestroy
      * This method is called when the app is closed.
-     * Action: Close the app from the MainActivity view.
+     * Action: Close the app from the AlertActivity view.
      */
     @Override
     protected void onDestroy() {

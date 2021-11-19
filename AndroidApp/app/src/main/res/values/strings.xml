@@ -24,4 +24,6 @@
 
     <string name="longitude_label">Longitude</string>
     <string name="longitude_text_view">-111.679121</string>
+
+    <string name="test_button">Test</string>
 </resources>
