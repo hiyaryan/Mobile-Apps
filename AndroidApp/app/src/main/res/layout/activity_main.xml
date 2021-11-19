@@ -1,18 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    Linear Layout Center -->
+    <LinearLayout
+        android:id="@+id/centerLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    Linear Layout Left for Labels -->
+    <LinearLayout
+        android:id="@+id/leftLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignEnd="@+id/centerLinearLayout"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <!--    Name Label -->
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/name_label"/>
+
+        <!--    Description Label -->
+        <TextView
+            android:id="@+id/descriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/description_label"/>
+
+        <!--    Category Label -->
+        <TextView
+            android:id="@+id/categoryLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/category_label"/>
+
+        <!--    Address Title Label -->
+        <TextView
+            android:id="@+id/addressTitleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/address_title_label"/>
+
+        <!--    Address Street Label -->
+        <TextView
+            android:id="@+id/addressStreetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/address_street_label"/>
+
+        <!--    Elevation Label -->
+        <TextView
+            android:id="@+id/elevationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/elevation_label"/>
+
+        <!--    Latitude Label -->
+        <TextView
+            android:id="@+id/latitudeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/latitude_label"/>
+
+        <!--    Longitude Label -->
+        <TextView
+            android:id="@+id/longitudeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/longitude_label"/>
+    </LinearLayout>
+
+    <!--    Linear Layout Right for Views -->
+    <LinearLayout
+        android:id="@+id/rightLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignStart="@+id/centerLinearLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <!--        Grid Layout for Button-->
+        <GridLayout
+            android:id="@+id/buttonGridLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <!--    Name Button -->
+            <Button
+                android:id="@+id/nameButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/name_button"/>
+        </GridLayout>
+
+        <!--    Description Text View -->
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:text="@string/description_text_view"/>
+
+        <!--    Category Text View -->
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/category_text_view"/>
+
+        <!--    Address Title Text View -->
+        <TextView
+            android:id="@+id/addressTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/address_title_text_view"/>
+
+        <!--    Address Street Text View -->
+        <TextView
+            android:id="@+id/addressStreetTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:text="@string/address_street_text_view"/>
+
+        <!--    Elevation Text View -->
+        <TextView
+            android:id="@+id/elevationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/elevation_text_view"/>
+
+        <!--    Latitude Text View -->
+        <TextView
+            android:id="@+id/latitudeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/latitude_text_view"/>
+
+        <!--    longitude Text View -->
+        <TextView
+            android:id="@+id/longitudeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/longitude_text_view"/>
+    </LinearLayout>
+
+</RelativeLayout>

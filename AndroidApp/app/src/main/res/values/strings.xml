@@ -1,3 +1,27 @@
 <resources>
-    <string name="app_name">AndroidApp</string>
+    <string name="app_name">Place Description</string>
+
+    <string name="name_label">Name</string>
+    <string name="name_button">ASU-Poly</string>
+
+    <string name="description_label">Description</string>
+    <string name="description_text_view">Home of ASU\'s Software Engineering Programs</string>
+
+    <string name="category_label">Category</string>
+    <string name="category_text_view">School</string>
+
+    <string name="address_title_label">Address Title</string>
+    <string name="address_title_text_view">ASU Software Engineering</string>
+
+    <string name="address_street_label">Address Street</string>
+    <string name="address_street_text_view">7171 E Sonoran Arroyo Mall\nPeralta Hall 230\nMesa AZ 85212</string>
+
+    <string name="elevation_label">Elevation</string>
+    <string name="elevation_text_view">1384.0</string>
+
+    <string name="latitude_label">Latitude</string>
+    <string name="latitude_text_view">33.306388</string>
+
+    <string name="longitude_label">Longitude</string>
+    <string name="longitude_text_view">-111.679121</string>
 </resources>
