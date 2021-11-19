@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Activity Main (activity_main.xml) -->
+<!-- This is the main activity view. -->
+
+<!-- author: Ryan Meneses -->
+<!-- version: 1.0 -->
+<!-- since: November 19, 2021 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -177,4 +183,12 @@
             android:text="@string/longitude_text_view"/>
     </LinearLayout>
 
+    <!--    Name Button -->
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="75dp"
+        android:layout_height="40dp"
+        android:layout_alignRight="@id/rightLinearLayout"
+        android:layout_alignBottom="@+id/rightLinearLayout"
+        android:text="@string/test_button"/>
 </RelativeLayout>
