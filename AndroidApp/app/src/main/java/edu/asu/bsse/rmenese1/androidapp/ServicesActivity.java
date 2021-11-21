@@ -3,6 +3,7 @@ package edu.asu.bsse.rmenese1.androidapp;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +36,44 @@ public class ServicesActivity extends AppCompatActivity {
 
         Button removeButton = (Button) findViewById(R.id.removeButton);
         removeButton.setText(String.format("Remove\n %s", key));
+
+        // Define the Add Button Listener
+        final Button addButton = findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ServicesActivity.this, AddPlaceActivity.class);
+                intent.putExtra("AddPlaceActivity", "");
+                ServicesActivity.this.startActivity(intent);
+            }
+        });
+
+        // Define the Modify Button Listener
+        modifyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
+                intent.putExtra("ModifyPlaceActivity", key);
+                ServicesActivity.this.startActivity(intent);
+            }
+        });
+
+        // Define the Remove Button Listener
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
+                intent.putExtra("RemovePlaceActivity", key);
+                ServicesActivity.this.startActivity(intent);
+            }
+        });
+
+        // Define the Add Button Listener
+        final Button calcButton = findViewById(R.id.calcButton);
+        calcButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ServicesActivity.this, FindDistanceActivity.class);
+                intent.putExtra("FindDistanceActivity", "");
+                ServicesActivity.this.startActivity(intent);
+            }
+        });
     }
 
     /**
