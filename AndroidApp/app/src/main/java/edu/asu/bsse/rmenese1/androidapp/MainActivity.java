@@ -32,6 +32,7 @@ import java.util.Iterator;
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private JSONObject places;
+    private String key = "ASU-Poly";
 
     /**
      * onCreate
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         nameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
-                intent.putExtra("ServicesActivity", "Requesting services.");
+                intent.putExtra("ServicesActivity", key);
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -157,12 +158,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 + ": " + "onItemSelected "
                 + "-> " + parent.getItemAtPosition(position));
 
-        String key = parent.getItemAtPosition(position).toString();
+        this.key = parent.getItemAtPosition(position).toString();
         try {
-            JSONObject place = getPlaces().getJSONObject(key);
+            JSONObject place = getPlaces().getJSONObject(this.key);
 
             Button nameButton = (Button) findViewById(R.id.nameButton);
-            nameButton.setText(key);
+            nameButton.setText(this.key);
 
             TextView descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(place.getString("description"));
@@ -186,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             longitudeTextView.setText(place.getString("longitude"));
 
         } catch (JSONException e) {
-            System.out.println("Setting default place " + key);
+            System.out.println("Setting default place " + this.key);
 
             Button nameButton = (Button) findViewById(R.id.nameButton);
             nameButton.setText(getString(R.string.name_button));
