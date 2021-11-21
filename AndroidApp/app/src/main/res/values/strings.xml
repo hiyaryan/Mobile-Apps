@@ -1,4 +1,5 @@
 <resources>
+    <!-- Main Activity View -->
     <string name="app_name">Place Description</string>
 
     <string name="name_label">Name</string>
@@ -26,4 +27,13 @@
     <string name="longitude_text_view">-111.679121</string>
 
     <string name="test_button">Test</string>
+
+    <!-- Services Activity View -->
+    <string name="add_button">Add Place</string>
+
+    <string name="modify_button">Modify Place</string>
+
+    <string name="remove_button">Remove Place</string>
+
+    <string name="calc_button">Find Distance</string>
 </resources>
