@@ -11,6 +11,11 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <Spinner
+        android:id="@+id/placesSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <!--    Linear Layout Center -->
     <LinearLayout
         android:id="@+id/centerLinearLayout"
