@@ -29,6 +29,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddPlaceActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+                <category android:name="android.intent.category.APP_FILES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ModifyPlaceActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.APP_FILES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RemovePlaceActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DELETE" />
+                <category android:name="android.intent.category.APP_FILES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FindDistanceActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ANSWER" />
+                <category android:name="android.intent.category.APP_CALCULATOR" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
