@@ -14,28 +14,28 @@
     <!--    Add Button -->
     <Button
         android:id="@+id/addButton"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:text="@string/add_button"/>
 
     <!--    Add Button -->
     <Button
         android:id="@+id/modifyButton"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:text="@string/modify_button"/>
 
     <!--    Add Button -->
     <Button
         android:id="@+id/removeButton"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:text="@string/remove_button"/>
 
     <!--    Add Button -->
     <Button
         android:id="@+id/calcButton"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
         android:text="@string/calc_button"/>
 </LinearLayout>
