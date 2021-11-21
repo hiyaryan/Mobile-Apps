@@ -2,7 +2,7 @@
   "ASU-West" : 
   {
     "address-title" : "ASU West Campus",
-    "address-street" : "13591 N 47th Ave$Phoenix AZ 85051",
+    "address-street" : "13591 N 47th Ave\nPhoenix AZ 85051",
     "elevation" : 1100.0,
     "latitude" : 33.608979,
     "longitude" : -112.159469,
@@ -14,7 +14,7 @@
   "UAK-Anchorage" : 
   {
     "address-title" : "University of Alaska at Anchorage",
-    "address-street" : "290 Spirit Dr$Anchorage AK 99508",
+    "address-street" : "290 Spirit Dr\nAnchorage AK 99508",
     "elevation" : 0.0,
     "latitude" : 61.189748,
     "longitude" : -149.826721,
@@ -26,7 +26,7 @@
   "Toreros" : 
   {
     "address-title" : "University of San Diego",
-    "address-street" : "5998 Alcala Park$San Diego CA 92110",
+    "address-street" : "5998 Alcala Park\nSan Diego CA 92110",
     "elevation" : 200.0,
     "latitude" : 32.771923,
     "longitude" : -117.188204,
@@ -38,7 +38,7 @@
   "Barrow-Alaska" : 
   {
     "address-title" : "Will Rogers Airport",
-    "address-street" : "1725 Ahkovak St$Barrow AK 99723",
+    "address-street" : "1725 Ahkovak St\nBarrow AK 99723",
     "elevation" : 5.0,
     "latitude" : 71.287881,
     "longitude" : -156.779417,
@@ -50,7 +50,7 @@
   "Calgary-Alberta" :
   {
     "address-title" : "Calgary International Airport",
-    "address-street" : "2000 Airport Rd NE$Calgary AB T2E 6Z8 Canada",
+    "address-street" : "2000 Airport Rd NE\nCalgary AB T2E 6Z8 Canada",
     "elevation" : 3556.0,
     "latitude" : 51.131377,
     "longitude" : -114.011246,
@@ -62,7 +62,7 @@
   "London-England" : 
   {
     "address-title" : "Renaissance London Heathrow Airport",
-    "address-street" : "5 Mondial Way$Harlington Hayes UB3 UK",
+    "address-street" : "5 Mondial Way\nHarlington Hayes UB3 UK",
     "elevation" : 82.0,
     "latitude" : 51.481959,
     "longitude" : -0.445286,
@@ -74,7 +74,7 @@
   "Moscow-Russia" : 
   {
     "address-title" : "Courtyard Moscow City Center",
-    "address-street" : "Voznesenskiy per 7 $ Moskva Russia 125009",
+    "address-street" : "Voznesenskiy per 7\n Moskva Russia 125009",
     "elevation" : 512.0,
     "latitude" : 55.758666,
     "longitude" : 37.604058,
@@ -86,7 +86,7 @@
   "New-York-NY" :
   {
     "address-title" : "New York City Hall",
-    "address-street" : "1 Elk St$New York NY 10007",
+    "address-street" : "1 Elk St\nNew York NY 10007",
     "elevation" : 2.0,
     "latitude" : 40.712991,
     "longitude" : -74.005948,
@@ -98,7 +98,7 @@
   "Notre-Dame-Paris" : 
   {
     "address-title" : "Cathedral Notre Dame de Paris",
-    "address-street" : "6 Parvis Notre-Dame Pl Jean-Paul-II$75004 Paris France",
+    "address-street" : "6 Parvis Notre-Dame Pl Jean-Paul-II\n75004 Paris France",
     "elevation" : 115.0,
     "latitude" : 48.852972,
     "longitude" : 2.349910,
@@ -158,7 +158,7 @@
   "Muir-Woods" : 
   {
     "address-title" : "Muir Woods National Monument",
-    "address-street" : "1 Muir Woods Rd$Mill Valley CA 94941",
+    "address-street" : "1 Muir Woods Rd\nMill Valley CA 94941",
     "elevation" : 350.0,
     "latitude" : 37.8912,
     "longitude" : -122.5957,
@@ -170,7 +170,7 @@
   "Windcave-Peak" : 
   {
     "address-title" : "Usery Mountain Recreation Area",
-    "address-street" : "3939 N Usery Pass Rd$Mesa AZ 85207",
+    "address-street" : "3939 N Usery Pass Rd\nMesa AZ 85207",
     "elevation" : 3130.0,
     "latitude" : 33.476069,
     "longitude" : -111.595709,
