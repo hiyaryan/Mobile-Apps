@@ -188,7 +188,7 @@
             android:text="@string/longitude_text_view"/>
     </LinearLayout>
 
-    <!--    Name Button -->
+    <!--    Test Button -->
     <Button
         android:id="@+id/testButton"
         android:layout_width="75dp"
