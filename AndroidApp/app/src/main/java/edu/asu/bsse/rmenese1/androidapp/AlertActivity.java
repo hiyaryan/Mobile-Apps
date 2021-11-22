@@ -1,6 +1,5 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,11 +30,9 @@ public class AlertActivity extends AppCompatActivity {
         new AlertDialog.Builder(AlertActivity.this)
                 .setTitle("Alert")
                 .setMessage(value)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(AlertActivity.this, MainActivity.class);
-                        AlertActivity.this.startActivity(intent);
-                    }
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    Intent intent1 = new Intent(AlertActivity.this, MainActivity.class);
+                    AlertActivity.this.startActivity(intent1);
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
