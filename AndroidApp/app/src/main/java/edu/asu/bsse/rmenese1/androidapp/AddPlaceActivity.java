@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
@@ -58,10 +59,24 @@ public class AddPlaceActivity extends AppCompatActivity {
                 android.util.Log.d("Button", this.getClass().getSimpleName() + ": " + "SUBMIT");
 
                 JSONObject place = getEditTextFields();
-                savePlaceToPlaces(place);
+                boolean wasSaved = savePlaceToPlaces(place);
 
-                Intent intent = new Intent(AddPlaceActivity.this, MainActivity.class);
-                AddPlaceActivity.this.startActivity(intent);
+                // If saved navigate to main view else alert user of missing field.
+                if(wasSaved) {
+                    Intent intent = new Intent(AddPlaceActivity.this, MainActivity.class);
+                    AddPlaceActivity.this.startActivity(intent);
+
+                } else {
+                    new AlertDialog.Builder(AddPlaceActivity.this)
+                            .setTitle("Alert")
+                            .setMessage("Name is a required field.")
+                            .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                                android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
+                                        + "Submitted without required name field.");
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
             }
         });
 
@@ -69,8 +84,9 @@ public class AddPlaceActivity extends AppCompatActivity {
         final Button clearButton = findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // TODO: Clear all Edit Text fields of text
                 android.util.Log.d("Button", this.getClass().getSimpleName() + ": " + "CLEAR");
+
+                clearEditTextFields();
             }
         });
     }
@@ -164,35 +180,38 @@ public class AddPlaceActivity extends AppCompatActivity {
     }
 
     /**
-     * Saves the new place to places.json.
+     * Saves the new place to places.json. Returns true if saved.
      *
      * @param place Place
+     * @return boolean
      */
-    private void savePlaceToPlaces(JSONObject place) {
+    private boolean savePlaceToPlaces(JSONObject place) {
         JSONObject places = new JSONObject();
         try {
-            places.put(place.get("name").toString(), place);
+            // If the user input a name continue processing else return false.
+            if (!place.get("name").toString().equals("")) {
+                places.put(place.get("name").toString(), place);
 
-            // Fill JSON object with existing places
-            for (Iterator<String> it = this.places.keys(); it.hasNext(); ) {
-                String key = it.next();
-                places.put(key, this.places.get(key));
+                // Fill JSON object with existing places
+                for (Iterator<String> it = this.places.keys(); it.hasNext(); ) {
+                    String key = it.next();
+                    places.put(key, this.places.get(key));
+                }
+
+                writePlacesToFile(places);
+
+                return true;
             }
-
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not add JSON place object to places.");
         }
 
-        writePlacesToFile(places);
+        return false;
     }
 
     /**
      * Save places to places.json.
-     * FIXME: Write to "internal storage". places.json is saved to the internal storage when the
-     *   app is launched. res/raw is READ-ONLY it does not contain updated data.
-     *
-     * @return JSONObject
      */
     private void writePlacesToFile(JSONObject places) {
         try {
@@ -212,5 +231,42 @@ public class AddPlaceActivity extends AppCompatActivity {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not write to file.");
         }
+    }
+
+    /**
+     * Clear the Edit Text Fields.
+     */
+    private void clearEditTextFields() {
+        // Get text from Name Edit Text
+        EditText text = findViewById(R.id.nameEditText);
+        text.setText("");
+
+        // Get text from Description Edit Text
+        text = findViewById(R.id.descriptionEditText);
+        text.setText("");
+
+        // Get text from Category Edit Text
+        text = findViewById(R.id.categoryEditText);
+        text.setText("");
+
+        // Get text from Address Title Edit Text
+        text = findViewById(R.id.addressTitleEditText);
+        text.setText("");
+
+        // Get text from Address Street Edit Text
+        text = findViewById(R.id.addressStreetEditText);
+        text.setText("");
+
+        // Get text from Elevation Edit Text
+        text = findViewById(R.id.elevationEditText);
+        text.setText("");
+
+        // Get text from Latitude Edit Text
+        text = findViewById(R.id.latitudeEditText);
+        text.setText("");
+
+        // Get text from Longitude Edit Text
+        text = findViewById(R.id.longitudeEditText);
+        text.setText("");
     }
 }
