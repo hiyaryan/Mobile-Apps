@@ -161,58 +161,53 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         this.key = parent.getItemAtPosition(position).toString();
         try {
-            JSONObject place = getPlaces().getJSONObject(this.key);
+            JSONObject place = this.places.getJSONObject(this.key);
 
-            Button nameButton = (Button) findViewById(R.id.nameButton);
+            Button nameButton = findViewById(R.id.nameButton);
             nameButton.setText(this.key);
 
-            TextView descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+            TextView descriptionTextView = findViewById(R.id.descriptionTextView);
             descriptionTextView.setText(place.getString("description"));
 
-            TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
+            TextView categoryTextView = findViewById(R.id.categoryTextView);
             categoryTextView.setText(place.getString("category"));
 
-            TextView addressTitleTextView = (TextView) findViewById(R.id.addressTitleTextView);
+            TextView addressTitleTextView = findViewById(R.id.addressTitleTextView);
             addressTitleTextView.setText(place.getString("address-title"));
 
-            TextView addressStreetTextView = (TextView) findViewById(R.id.addressStreetTextView);
+            TextView addressStreetTextView = findViewById(R.id.addressStreetTextView);
             addressStreetTextView.setText(place.getString("address-street"));
 
-            TextView elevationTextView = (TextView) findViewById(R.id.elevationTextView);
+            TextView elevationTextView = findViewById(R.id.elevationTextView);
             elevationTextView.setText(place.getString("elevation"));
 
-            TextView latitudeTextView = (TextView) findViewById(R.id.latitudeTextView);
+            TextView latitudeTextView = findViewById(R.id.latitudeTextView);
             latitudeTextView.setText(place.getString("latitude"));
 
-            TextView longitudeTextView = (TextView) findViewById(R.id.longitudeTextView);
+            TextView longitudeTextView = findViewById(R.id.longitudeTextView);
             longitudeTextView.setText(place.getString("longitude"));
 
         } catch (JSONException e) {
             System.out.println("Setting default place " + this.key);
 
-            Button nameButton = (Button) findViewById(R.id.nameButton);
-            nameButton.setText(getString(R.string.name_button));
+            try {
+                JSONObject defaultPlace = new JSONObject();
 
-            TextView descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
-            descriptionTextView.setText(getString(R.string.description_text_view));
+                defaultPlace.put("address-title", getString(R.string.address_title_text_view));
+                defaultPlace.put("address-street", getString(R.string.address_street_text_view));
+                defaultPlace.put("elevation", getString(R.string.elevation_text_view));
+                defaultPlace.put("latitude", getString(R.string.latitude_text_view));
+                defaultPlace.put("longitude", getString(R.string.longitude_text_view));
+                defaultPlace.put("name", getString(R.string.name_button));
+                defaultPlace.put("image", "");
+                defaultPlace.put("description", getString(R.string.description_text_view));
+                defaultPlace.put("category", getString(R.string.category_text_view));
 
-            TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
-            categoryTextView.setText(getString(R.string.category_text_view));
+                this.places.put("ASU-Poly", defaultPlace);
 
-            TextView addressTitleTextView = (TextView) findViewById(R.id.addressTitleTextView);
-            addressTitleTextView.setText(getString(R.string.address_title_text_view));
-
-            TextView addressStreetTextView = (TextView) findViewById(R.id.addressStreetTextView);
-            addressStreetTextView.setText(getString(R.string.address_street_text_view));
-
-            TextView elevationTextView = (TextView) findViewById(R.id.elevationTextView);
-            elevationTextView.setText(getString(R.string.elevation_text_view));
-
-            TextView latitudeTextView = (TextView) findViewById(R.id.latitudeTextView);
-            latitudeTextView.setText(getString(R.string.latitude_text_view));
-
-            TextView longitudeTextView = (TextView) findViewById(R.id.longitudeTextView);
-            longitudeTextView.setText(getString(R.string.longitude_text_view));
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
         }
     }
 
@@ -236,8 +231,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         JSONObject places = readPlacesFile();
 
         ArrayList<String> elements = new ArrayList<>();
-        elements.add("ASU-Poly");
-
         for (Iterator<String> it = places.keys(); it.hasNext(); ) {
             String place = it.next();
             elements.add(place);
@@ -296,14 +289,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         return this.places;
-    }
-
-    /**
-     * Get places object assigned on app launch.
-     *
-     * @return JSONObject
-     */
-    public JSONObject getPlaces() {
-        return places;
     }
 }
