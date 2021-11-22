@@ -47,24 +47,24 @@ public class ServicesActivity extends AppCompatActivity {
 
         // Define the Modify Button Listener
         modifyButton.setOnClickListener(v -> {
-            Intent intent12 = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
-            intent12.putExtra("ModifyPlaceActivity", extras);
-            ServicesActivity.this.startActivity(intent12);
+            Intent intent2 = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
+            intent2.putExtra("ModifyPlaceActivity", extras);
+            ServicesActivity.this.startActivity(intent2);
         });
 
         // Define the Remove Button Listener
         removeButton.setOnClickListener(v -> {
-            Intent intent13 = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
-            intent13.putExtra("RemovePlaceActivity", extras);
-            ServicesActivity.this.startActivity(intent13);
+            Intent intent3 = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
+            intent3.putExtra("RemovePlaceActivity", extras);
+            ServicesActivity.this.startActivity(intent3);
         });
 
         // Define the Calc Button Listener
         final Button calcButton = findViewById(R.id.calcButton);
         calcButton.setOnClickListener(v -> {
-            Intent intent14 = new Intent(ServicesActivity.this, FindDistanceActivity.class);
-            intent14.putExtra("FindDistanceActivity", "");
-            ServicesActivity.this.startActivity(intent14);
+            Intent intent4 = new Intent(ServicesActivity.this, FindDistanceActivity.class);
+            intent4.putExtra("FindDistanceActivity", extras);
+            ServicesActivity.this.startActivity(intent4);
         });
     }
 
