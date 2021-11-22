@@ -36,4 +36,9 @@
     <string name="remove_button">Remove Place</string>
 
     <string name="calc_button">Find Distance</string>
+
+    <!--    Add Activity View-->
+    <string name="clear_button">Clear</string>
+
+    <string name="submit_button">Submit</string>
 </resources>
