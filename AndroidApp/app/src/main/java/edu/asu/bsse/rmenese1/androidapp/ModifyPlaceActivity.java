@@ -58,6 +58,8 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         TextView nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(key);
 
+        setEditTextFields(key);
+
         // TODO: Set all EditText fields to existing
 
         // Define the Submit Button Listener
@@ -82,6 +84,49 @@ public class ModifyPlaceActivity extends AppCompatActivity {
                 clearEditTextFields();
             }
         });
+    }
+
+    /**
+     * Sets the edit text fields on the view to the place's attributes.
+     *
+     * @param key Name
+     */
+    public void setEditTextFields(String key) {
+        try {
+            JSONObject place = (JSONObject) this.places.get(key);
+
+            // Get text from Description Edit Text
+            EditText text = findViewById(R.id.descriptionEditText);
+            text.setText(place.getString("description"));
+
+            // Get text from Category Edit Text
+            text = findViewById(R.id.categoryEditText);
+            text.setText(place.getString("category"));
+
+            // Get text from Address Title Edit Text
+            text = findViewById(R.id.addressTitleEditText);
+            text.setText(place.getString("address-title"));
+
+            // Get text from Address Street Edit Text
+            text = findViewById(R.id.addressStreetEditText);
+            text.setText(place.getString("address-street"));
+
+            // Get text from Elevation Edit Text
+            text = findViewById(R.id.elevationEditText);
+            text.setText(place.getString("elevation"));
+
+            // Get text from Latitude Edit Text
+            text = findViewById(R.id.latitudeEditText);
+            text.setText(place.getString("latitude"));
+
+            // Get text from Longitude Edit Text
+            text = findViewById(R.id.longitudeEditText);
+            text.setText(place.getString("longitude"));
+
+        } catch (JSONException je) {
+            android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
+                    + "Could set edit text fields in modify view.");
+        }
     }
 
     /**
