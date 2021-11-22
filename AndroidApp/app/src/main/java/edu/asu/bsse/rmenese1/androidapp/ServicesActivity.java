@@ -61,7 +61,7 @@ public class ServicesActivity extends AppCompatActivity {
         // Define the Remove Button Listener
         removeButton.setOnClickListener(v -> {
             Intent intent13 = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
-            intent13.putExtra("RemovePlaceActivity", key);
+            intent13.putExtra("RemovePlaceActivity", extras);
             ServicesActivity.this.startActivity(intent13);
         });
 
