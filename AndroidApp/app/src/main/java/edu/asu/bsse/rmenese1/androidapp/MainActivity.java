@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,8 +62,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         final Button nameButton = findViewById(R.id.nameButton);
         nameButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Bundle extras = new Bundle();
+                extras.putString("key", key);
+                extras.putString("places", places.toString());
+
                 Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
-                intent.putExtra("ServicesActivity", key);
+                intent.putExtra("ServicesActivity", extras);
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -253,26 +258,45 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @return JSONObject
      */
     private JSONObject readPlacesFile() {
-        android.util.Log.d("Spinner", this.getClass().getSimpleName() + ": " + "setSpinnerElements");
-
-        InputStream inputStream = getResources()
-                .openRawResource(getResources().getIdentifier("places", "raw", getPackageName()));
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder sb = new StringBuilder();
-
+        StringBuilder places = new StringBuilder();
         try {
+            android.util.Log.d("File", this.getClass().getSimpleName() + ": "
+                    + "Checking internal storage for file...");
+
+            FileInputStream fis = openFileInput("places.json");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+
             for (String line; (line = br.readLine()) != null; ) {
-                sb.append(line);
+                places.append(line);
             }
 
-            this.places = new JSONObject(sb.toString());
+        } catch (IOException e) {
+            android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
+                    + "File not in assets. Checking resources...");
 
-        } catch (IOException ioe) {
-            System.out.print("Error parsing string.");
+            try {
+                InputStream is = getResources()
+                        .openRawResource(getResources()
+                                .getIdentifier("places", "raw", getPackageName()));
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+                for (String line; (line = br.readLine()) != null; ) {
+                    places.append(line);
+                }
+
+            } catch (IOException ioe) {
+                android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
+                        + "File not in resources.");
+            }
+        }
+
+        try {
+            this.places = new JSONObject(places.toString());
 
         } catch (JSONException je) {
-            System.out.print("Error parsing json.");
+            android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
+                    + "Could not parse JSON.");
         }
 
         return this.places;
