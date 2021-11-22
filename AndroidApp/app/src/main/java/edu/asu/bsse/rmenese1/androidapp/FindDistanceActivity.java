@@ -155,25 +155,30 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         double distance = 0.00;
         double bearing = 0.00;
         try {
-            double lat1 = fromPlace.getDouble("latitude"); // latitude: fromPlace
-            double lon1 = fromPlace.getDouble("longitude"); // longitude: fromPlace
-            double lat2 = toPlace.getDouble("latitude"); // latitude: toPlace
-            double lon2 = toPlace.getDouble("longitude"); // longitude: toPlace
+            // Set fromPlace = (lat1, lon1)
+            double lat1 = fromPlace.getDouble("latitude");
+            double lon1 = fromPlace.getDouble("longitude");
 
-            // Great Circle distance computation using the law of cosines
-            // Reference: https://www.geodatasource.com/developers/java
-            double theta = lon1 - lon2;
-            distance = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
-            distance = Math.acos(distance);
-            distance = Math.toDegrees(distance);
-            distance = distance * 60 * 1.1515;
+            // Set toPlace = (lat2, lon2)
+            double lat2 = toPlace.getDouble("latitude");
+            double lon2 = toPlace.getDouble("longitude");
 
-            // Initial bearing computation
-            // Reference: https://www.movable-type.co.uk/scripts/latlong.html
-            double y = Math.sin(lon2 - lon1) * Math.cos(lat2);
-            double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-            double phi = Math.atan2(y, x);
-            bearing = ((phi * 180 / Math.PI) + 360) % 360; // in degrees
+            if((lon2 - lon1 != 0) && (lat2 - lat1 != 0)) {
+                // Great Circle distance computation using the law of cosines
+                // Reference: https://www.geodatasource.com/developers/java
+                double theta = lon1 - lon2;
+                distance = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+                distance = Math.acos(distance);
+                distance = Math.toDegrees(distance);
+                distance = distance * 60 * 1.1515;
+
+                // Initial bearing computation
+                // Reference: https://www.movable-type.co.uk/scripts/latlong.html
+                double y = Math.sin(lon2 - lon1) * Math.cos(lat2);
+                double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+                double phi = Math.atan2(y, x);
+                bearing = ((phi * 180 / Math.PI) + 360) % 360;
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
