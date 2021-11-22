@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Find Distance Services (activity_main.xml) -->
+<!-- This is the services activity view. -->
+
+<!-- author: Ryan Meneses -->
+<!-- version: 1.0 -->
+<!-- since: November 19, 2021 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!--    Distance Title -->
+    <TextView
+        android:id="@+id/distanceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:text="@string/distance_title"/>
+
+    <!--    From Place Spinner -->
+    <Spinner
+        android:id="@+id/fromPlaceSpinner"
+        android:layout_width="210dp"
+        android:layout_height="60dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_margin="10dp"/>
+
+    <!--    To Place Spinner -->
+    <Spinner
+        android:id="@+id/toPlaceSpinner"
+        android:layout_width="210dp"
+        android:layout_height="60dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_margin="10dp"/>
+
+    <!--    Great Circle Distance Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:text="@string/great_circle_distance_label"/>
+
+    <!--    Great Circle Distance Calculation -->
+    <TextView
+        android:id="@+id/greatCircleDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:text="@string/great_circle_distance"/>
+
+    <!--    Initial Bearing Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:text="@string/initial_bearing_label"/>
+
+    <!--    Initial Bearing Calculation -->
+    <TextView
+        android:id="@+id/initialBearing"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:text="@string/initial_bearing"/>
+</LinearLayout>

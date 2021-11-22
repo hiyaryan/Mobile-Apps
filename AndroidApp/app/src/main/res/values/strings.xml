@@ -44,4 +44,15 @@
 
     <!--    Modify Activity View-->
     <string name="name_text_view">Name</string>
+
+    <!--    Find Distance Activity-->
+    <string name="distance_title">Great Circle Distance</string>
+
+    <string name="great_circle_distance_label">Great Circle Distance</string>
+
+    <string name="great_circle_distance">Distance</string>
+
+    <string name="initial_bearing_label">Initial Bearing</string>
+
+    <string name="initial_bearing">Bearing</string>
 </resources>
