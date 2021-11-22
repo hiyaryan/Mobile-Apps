@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         // Create a Set the Spinner with an array of Places
-        Spinner spinner = (Spinner) findViewById(R.id.placesSpinner);
+        Spinner spinner = findViewById(R.id.placesSpinner);
         spinner.setOnItemSelectedListener(this);
         setSpinnerElements(spinner);
 
@@ -60,26 +60,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Define the Name Button Listener
         final Button nameButton = findViewById(R.id.nameButton);
-        nameButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Bundle extras = new Bundle();
-                extras.putString("key", key);
-                extras.putString("places", places.toString());
+        nameButton.setOnClickListener(v -> {
+            Bundle extras = new Bundle();
+            extras.putString("key", key);
+            extras.putString("places", places.toString());
 
-                Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
-                intent.putExtra("ServicesActivity", extras);
-                MainActivity.this.startActivity(intent);
-            }
+            Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
+            intent.putExtra("ServicesActivity", extras);
+            MainActivity.this.startActivity(intent);
         });
 
         // Define the Test Button Listener
         final Button testButton = findViewById(R.id.testButton);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AlertActivity.class);
-                intent.putExtra("AlertActivity", "Hello Android Developer");
-                MainActivity.this.startActivity(intent);
-            }
+        testButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AlertActivity.class);
+            intent.putExtra("AlertActivity", "Hello Android Developer");
+            MainActivity.this.startActivity(intent);
         });
     }
 
