@@ -17,6 +17,14 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
 
+/**
+ * Add Place Activity (AddPlaceActivity.java)
+ * This activity allows the user to add a new place.
+ *
+ * @author Ryan Meneses
+ * @version 1.0
+ * @since November 21, 2021
+ */
 public class AddPlaceActivity extends AppCompatActivity {
     private JSONObject places;
 
@@ -38,7 +46,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         try {
             this.places = new JSONObject(places);
 
-//            System.out.println(this.places);
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not parse JSON.");
@@ -53,9 +60,8 @@ public class AddPlaceActivity extends AppCompatActivity {
                 JSONObject place = getEditTextFields();
                 savePlaceToPlaces(place);
 
-//                Intent intent = new Intent(AddPlaceActivity.this, MainActivity.class);
-//                intent.putExtra("MainActivity", place.toString());
-//                AddPlaceActivity.this.startActivity(intent);
+                Intent intent = new Intent(AddPlaceActivity.this, MainActivity.class);
+                AddPlaceActivity.this.startActivity(intent);
             }
         });
 
@@ -78,7 +84,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         JSONObject place = new JSONObject();
 
         // Get the text from the Edit Text Fields
-
         // Get text from Name Edit Text
         EditText text = findViewById(R.id.nameEditText);
         String name = text.getText().toString();
