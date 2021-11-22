@@ -37,8 +37,11 @@
 
     <string name="calc_button">Find Distance</string>
 
-    <!--    Add Activity View-->
+    <!--    Add/Modify Activity View-->
     <string name="clear_button">Clear</string>
 
     <string name="submit_button">Submit</string>
+
+    <!--    Modify Activity View-->
+    <string name="name_text_view">Name</string>
 </resources>

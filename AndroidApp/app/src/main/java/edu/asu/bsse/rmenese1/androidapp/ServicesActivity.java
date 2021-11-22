@@ -54,7 +54,7 @@ public class ServicesActivity extends AppCompatActivity {
         // Define the Modify Button Listener
         modifyButton.setOnClickListener(v -> {
             Intent intent12 = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
-            intent12.putExtra("ModifyPlaceActivity", key);
+            intent12.putExtra("ModifyPlaceActivity", extras);
             ServicesActivity.this.startActivity(intent12);
         });
 
