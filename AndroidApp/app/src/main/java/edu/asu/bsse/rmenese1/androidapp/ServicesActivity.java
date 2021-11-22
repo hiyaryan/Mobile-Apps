@@ -9,6 +9,9 @@ import android.widget.Button;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Alert Activity (AlertActivity.java)
  * This is the alert activity controller.
@@ -29,50 +32,45 @@ public class ServicesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_services);
 
         Intent intent = getIntent();
-        String key = intent.getStringExtra("ServicesActivity");
+        Bundle extras = intent.getBundleExtra("ServicesActivity");
 
-        Button modifyButton = (Button) findViewById(R.id.modifyButton);
+        String key = extras.getString("key");
+        String places = extras.getString("places");
+
+        Button modifyButton = findViewById(R.id.modifyButton);
         modifyButton.setText(String.format("Modify\n %s", key));
 
-        Button removeButton = (Button) findViewById(R.id.removeButton);
+        Button removeButton = findViewById(R.id.removeButton);
         removeButton.setText(String.format("Remove\n %s", key));
 
         // Define the Add Button Listener
         final Button addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ServicesActivity.this, AddPlaceActivity.class);
-                intent.putExtra("AddPlaceActivity", "");
-                ServicesActivity.this.startActivity(intent);
-            }
+        addButton.setOnClickListener(v -> {
+            Intent intent1 = new Intent(ServicesActivity.this, AddPlaceActivity.class);
+            intent1.putExtra("places", places);
+            ServicesActivity.this.startActivity(intent1);
         });
 
         // Define the Modify Button Listener
-        modifyButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
-                intent.putExtra("ModifyPlaceActivity", key);
-                ServicesActivity.this.startActivity(intent);
-            }
+        modifyButton.setOnClickListener(v -> {
+            Intent intent12 = new Intent(ServicesActivity.this, ModifyPlaceActivity.class);
+            intent12.putExtra("ModifyPlaceActivity", key);
+            ServicesActivity.this.startActivity(intent12);
         });
 
         // Define the Remove Button Listener
-        removeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
-                intent.putExtra("RemovePlaceActivity", key);
-                ServicesActivity.this.startActivity(intent);
-            }
+        removeButton.setOnClickListener(v -> {
+            Intent intent13 = new Intent(ServicesActivity.this, RemovePlaceActivity.class);
+            intent13.putExtra("RemovePlaceActivity", key);
+            ServicesActivity.this.startActivity(intent13);
         });
 
         // Define the Add Button Listener
         final Button calcButton = findViewById(R.id.calcButton);
-        calcButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(ServicesActivity.this, FindDistanceActivity.class);
-                intent.putExtra("FindDistanceActivity", "");
-                ServicesActivity.this.startActivity(intent);
-            }
+        calcButton.setOnClickListener(v -> {
+            Intent intent14 = new Intent(ServicesActivity.this, FindDistanceActivity.class);
+            intent14.putExtra("FindDistanceActivity", "");
+            ServicesActivity.this.startActivity(intent14);
         });
     }
 
