@@ -2,10 +2,6 @@ package edu.asu.bsse.rmenese1.androidapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +14,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
+/**
+ * Remove Place Activity (RemovePlaceActivity.java)
+ * This activity allows the user to remove an existing place.
+ *
+ * @author Ryan Meneses
+ * @version 1.0
+ * @since November 21, 2021
+ */
 public class RemovePlaceActivity extends AppCompatActivity {
     private JSONObject places;
 
