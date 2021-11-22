@@ -1,16 +1,10 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Alert Activity (AlertActivity.java)
@@ -65,7 +59,7 @@ public class ServicesActivity extends AppCompatActivity {
             ServicesActivity.this.startActivity(intent13);
         });
 
-        // Define the Add Button Listener
+        // Define the Calc Button Listener
         final Button calcButton = findViewById(R.id.calcButton);
         calcButton.setOnClickListener(v -> {
             Intent intent14 = new Intent(ServicesActivity.this, FindDistanceActivity.class);
