@@ -78,7 +78,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                             // System.out.println(result);
 
                             // Save place to places on server
-                            mi = new MethodInformation(null, getString(R.string.url),"saveToJsonFile", new Object[] {place});
+                            mi = new MethodInformation(null, getString(R.string.url),"saveToJsonFile", new Object[] {});
                             ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
                             // result = new JSONObject(ac.get().resultAsJson);
