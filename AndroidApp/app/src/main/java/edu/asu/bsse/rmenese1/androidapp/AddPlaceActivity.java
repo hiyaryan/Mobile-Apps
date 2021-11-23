@@ -62,6 +62,7 @@ public class AddPlaceActivity extends AppCompatActivity {
 
                 JSONObject place = getEditTextFields();
 
+                // If places is null the app is connected to the JsonRPC server
                 boolean wasSaved = false;
                 if (places != null) {
                     wasSaved = savePlaceToPlaces(place);
