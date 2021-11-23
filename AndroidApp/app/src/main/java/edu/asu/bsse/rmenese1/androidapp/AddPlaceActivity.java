@@ -45,7 +45,9 @@ public class AddPlaceActivity extends AppCompatActivity {
         String places = intent.getStringExtra("places");
 
         try {
-            this.places = new JSONObject(places);
+            if (places != null) {
+                this.places = new JSONObject(places);
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -59,7 +61,38 @@ public class AddPlaceActivity extends AppCompatActivity {
                 android.util.Log.d("Button", this.getClass().getSimpleName() + ": " + "SUBMIT");
 
                 JSONObject place = getEditTextFields();
-                boolean wasSaved = savePlaceToPlaces(place);
+
+                boolean wasSaved = false;
+                if (places != null) {
+                    wasSaved = savePlaceToPlaces(place);
+
+                } else {
+                    try {
+                        if(!place.get("name").toString().equals("")) {
+                            // Send place to server
+                            MethodInformation mi = new MethodInformation(null, getString(R.string.url),"add", new Object[] {place});
+                            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                            // JSONObject result = new JSONObject(ac.get().resultAsJson);
+                            // System.out.println(result);
+
+                            // Save place to places on server
+                            mi = new MethodInformation(null, getString(R.string.url),"saveToJsonFile", new Object[] {place});
+                            ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                            // result = new JSONObject(ac.get().resultAsJson);
+                            // System.out.println(result);
+
+                            wasSaved = true;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                    } catch (Exception ex) {
+                        android.util.Log.w(this.getClass().getSimpleName(),
+                                "Exception: "+ ex.getMessage());
+                    }
+                }
 
                 // If saved navigate to main view else alert user of missing field.
                 if(wasSaved) {
