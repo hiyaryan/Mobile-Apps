@@ -55,4 +55,7 @@
     <string name="initial_bearing_label">Initial Bearing</string>
 
     <string name="initial_bearing">Bearing</string>
+
+    <!--    AsyncTask-->
+    <string name="url">http://10.0.2.2:8080/</string>
 </resources>

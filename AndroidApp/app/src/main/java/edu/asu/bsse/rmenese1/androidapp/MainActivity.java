@@ -99,6 +99,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onStart() {
         super.onStart();
         android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onStart");
+
+        try{
+            MethodInformation mi = new MethodInformation(this, getString(R.string.url),"getNames", new Object[] {});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+        } catch (Exception ex){
+            android.util.Log.w(this.getClass().getSimpleName(),"Exception creating adapter: "+
+                    ex.getMessage());
+        }
     }
 
     /**
