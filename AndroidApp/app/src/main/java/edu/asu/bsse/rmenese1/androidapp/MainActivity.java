@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onRestart() {
         super.onRestart();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onRestart");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onRestart");
     }
 
     /**
@@ -98,15 +99,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onStart() {
         super.onStart();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onStart");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onStart");
 
         try{
             MethodInformation mi = new MethodInformation(this, getString(R.string.url),"getNames", new Object[] {});
             AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
         } catch (Exception ex){
-            android.util.Log.w(this.getClass().getSimpleName(),"Exception creating adapter: "+
-                    ex.getMessage());
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception creating adapter: "+ ex.getMessage());
         }
     }
 
@@ -118,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
         super.onResume();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onResume");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onResume");
     }
 
     /**
@@ -129,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onPause() {
         super.onPause();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onPause");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onPause");
     }
 
     /**
@@ -140,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onStop() {
         super.onStop();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onStop");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onStop");
     }
 
     /**
@@ -151,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onDestroy");
+        android.util.Log.d("LifeCycleMethod",
+                this.getClass().getSimpleName() + ": onDestroy");
     }
 
     /**
@@ -164,9 +170,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        android.util.Log.d("Spinner", this.getClass().getSimpleName()
-                + ": " + "onItemSelected "
-                + "-> " + parent.getItemAtPosition(position));
+        android.util.Log.d("Spinner",
+                this.getClass().getSimpleName() + ": onItemSelected -> " + parent.getItemAtPosition(position));
 
         this.key = parent.getItemAtPosition(position).toString();
         try {
@@ -227,7 +232,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        android.util.Log.d("Spinner", this.getClass().getSimpleName() + ": " + "onNothingSelected");
+        android.util.Log.d("Spinner",
+                this.getClass().getSimpleName() + ": onNothingSelected");
     }
 
     /**
@@ -235,7 +241,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param spinner Spinner
      */
     private void setSpinnerElements(Spinner spinner) {
-        android.util.Log.d("Spinner", this.getClass().getSimpleName() + ": " + "setSpinnerElements");
+        android.util.Log.d("Spinner",
+                this.getClass().getSimpleName() + ": setSpinnerElements");
 
         JSONObject places = readPlacesFile();
 
@@ -258,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private JSONObject readPlacesFile() {
         StringBuilder places = new StringBuilder();
         try {
-            android.util.Log.d("File", this.getClass().getSimpleName() + ": "
-                    + "Checking internal storage for file...");
+            android.util.Log.d("File",
+                    this.getClass().getSimpleName() + ": Checking internal storage for file...");
 
             FileInputStream fis = openFileInput("places.json");
             InputStreamReader isr = new InputStreamReader(fis);
@@ -270,8 +277,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
         } catch (IOException e) {
-            android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
-                    + "File not in assets. Checking resources...");
+            android.util.Log.d("Error",
+                    this.getClass().getSimpleName() + ": File not in assets. Checking resources...");
 
             try {
                 InputStream is = getResources()
@@ -284,8 +291,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
             } catch (IOException ioe) {
-                android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
-                        + "File not in resources.");
+                android.util.Log.d("Error",
+                        this.getClass().getSimpleName() + ": File not in resources.");
             }
         }
 
@@ -293,8 +300,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             this.places = new JSONObject(places.toString());
 
         } catch (JSONException je) {
-            android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
-                    + "Could not parse JSON.");
+            android.util.Log.d("Error",
+                    this.getClass().getSimpleName() + ": Could not parse JSON.");
         }
 
         return this.places;
