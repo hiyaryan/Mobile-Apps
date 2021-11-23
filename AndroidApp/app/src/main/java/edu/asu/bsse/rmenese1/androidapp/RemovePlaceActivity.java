@@ -41,7 +41,10 @@ public class RemovePlaceActivity extends AppCompatActivity {
         String places = extras.getString("places");
 
         try {
-            this.places = new JSONObject(places);
+            // If places is null the app is connected to the JsonRPC server
+            if (places != null) {
+                this.places = new JSONObject(places);
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -60,7 +63,31 @@ public class RemovePlaceActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     android.util.Log.d("Button", this.getClass().getSimpleName() + ": " + "OK");
 
-                    removePlaceInPlaces(key);
+                    // If places is null the app is connected to the JsonRPC server
+                    if (places != null) {
+                        removePlaceInPlaces(key);
+
+                    } else {
+                        try {
+                            // Send place to server
+                            MethodInformation mi = new MethodInformation(null, getString(R.string.url), "remove", new Object[]{key});
+                            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                            JSONObject result = new JSONObject(ac.get().resultAsJson);
+                            System.out.println(result);
+
+                            // Save place to places on server
+                            mi = new MethodInformation(null, getString(R.string.url), "saveToJsonFile", new Object[]{});
+                            ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                            result = new JSONObject(ac.get().resultAsJson);
+                            System.out.println(result);
+
+                        } catch (Exception ex) {
+                            android.util.Log.w(this.getClass().getSimpleName(),
+                                    "Exception: "+ ex.getMessage());
+                        }
+                    }
 
                     Intent intent1 = new Intent(RemovePlaceActivity.this, MainActivity.class);
                     RemovePlaceActivity.this.startActivity(intent1);
