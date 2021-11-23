@@ -73,15 +73,15 @@ public class RemovePlaceActivity extends AppCompatActivity {
                             MethodInformation mi = new MethodInformation(null, getString(R.string.url), "remove", new Object[]{key});
                             AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
-                            JSONObject result = new JSONObject(ac.get().resultAsJson);
-                            System.out.println(result);
+                            // JSONObject result = new JSONObject(ac.get().resultAsJson);
+                            // System.out.println(result);
 
                             // Save place to places on server
                             mi = new MethodInformation(null, getString(R.string.url), "saveToJsonFile", new Object[]{});
                             ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
-                            result = new JSONObject(ac.get().resultAsJson);
-                            System.out.println(result);
+                            // result = new JSONObject(ac.get().resultAsJson);
+                            // System.out.println(result);
 
                         } catch (Exception ex) {
                             android.util.Log.w(this.getClass().getSimpleName(),
