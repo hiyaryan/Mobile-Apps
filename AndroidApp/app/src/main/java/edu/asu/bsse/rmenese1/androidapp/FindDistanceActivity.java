@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,7 +51,9 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         String places = extras.getString("places");
 
         try {
-            this.places = new JSONObject(places);
+            if (places != null) {
+                this.places = new JSONObject(places);
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -97,13 +100,34 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         }
 
         try {
-            JSONObject fromPlace = this.places.getJSONObject(this.fromPlace);
-            JSONObject toPlace = this.places.getJSONObject(this.toPlace);
+            JSONObject fromPlace;
+            JSONObject toPlace;
+            if (places != null) {
+                fromPlace = this.places.getJSONObject(this.fromPlace);
+                toPlace = this.places.getJSONObject(this.toPlace);
+
+            } else {
+                MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {this.fromPlace});
+                AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject jsonFromPlace = new JSONObject(ac.get().resultAsJson);
+                fromPlace = jsonFromPlace.getJSONObject("result");
+
+                mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {this.toPlace});
+                ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject jsonToPlace = new JSONObject(ac.get().resultAsJson);
+                toPlace = jsonToPlace.getJSONObject("result");
+            }
 
             calcDistance(fromPlace, toPlace);
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not find place from provided key.");
+
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception: "+ ex.getMessage());
         }
     }
 
@@ -126,9 +150,28 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         android.util.Log.d("Spinner", this.getClass().getSimpleName() + ": " + "setSpinnerElements");
 
         ArrayList<String> elements = new ArrayList<>();
-        for (Iterator<String> it = places.keys(); it.hasNext(); ) {
-            String place = it.next();
-            elements.add(place);
+
+        if (places != null) {
+            for (Iterator<String> it = places.keys(); it.hasNext(); ) {
+                String place = it.next();
+                elements.add(place);
+            }
+        } else {
+            try {
+                MethodInformation mi = new MethodInformation(null, getString(R.string.url), "getNames", new Object[]{});
+                AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject places = new JSONObject(ac.get().resultAsJson);
+                JSONArray names = (JSONArray) places.get("result");
+
+                for (int i = 0; i < names.length(); i++) {
+                    elements.add(names.getString(i));
+                }
+
+            } catch (Exception ex) {
+                android.util.Log.w(this.getClass().getSimpleName(),
+                        "Exception: "+ ex.getMessage());
+            }
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, elements);
