@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -101,15 +102,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onStart();
         android.util.Log.d("LifeCycleMethod",
                 this.getClass().getSimpleName() + ": onStart");
-
-        try{
-            MethodInformation mi = new MethodInformation(this, getString(R.string.url),"getNames", new Object[] {});
-            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-
-        } catch (Exception ex){
-            android.util.Log.w(this.getClass().getSimpleName(),
-                    "Exception creating adapter: "+ ex.getMessage());
-        }
     }
 
     /**
@@ -175,7 +167,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         this.key = parent.getItemAtPosition(position).toString();
         try {
-            JSONObject place = this.places.getJSONObject(this.key);
+            // If the server is up the class attribute places will be null
+            // Therefore based on the selected spinner item, the place object will
+            // need to be called from the server
+            JSONObject place = new JSONObject();
+            if (this.places == null) {
+                MethodInformation mi = new MethodInformation(this, getString(R.string.url),"get", new Object[] {key});
+                AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject jsonPlace = new JSONObject(ac.get().resultAsJson);
+                place = jsonPlace.getJSONObject("result");
+
+            } else {
+                place = this.places.getJSONObject(this.key);
+            }
 
             Button nameButton = findViewById(R.id.nameButton);
             nameButton.setText(this.key);
@@ -222,6 +227,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
+
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception: "+ ex.getMessage());
         }
     }
 
@@ -244,12 +253,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         android.util.Log.d("Spinner",
                 this.getClass().getSimpleName() + ": setSpinnerElements");
 
-        JSONObject places = readPlacesFile();
-
+        JSONObject places;
         ArrayList<String> elements = new ArrayList<>();
-        for (Iterator<String> it = places.keys(); it.hasNext(); ) {
-            String place = it.next();
-            elements.add(place);
+
+        // Try initializing the app using JsonRPC server.
+        try{
+            MethodInformation mi = new MethodInformation(this, getString(R.string.url),"getNames", new Object[] {});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+            places = new JSONObject(ac.get().resultAsJson);
+            JSONArray names = (JSONArray) places.get("result");
+
+            for (int i = 0; i < names.length(); i++) {
+                elements.add(names.getString(i));
+            }
+
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception: "+ ex.getMessage());
+
+            places = null;
+        }
+
+        // If the server is down places will be null.
+        // If places is null run the app using local storage.
+        if (places == null) {
+            places = readPlacesFile();
+
+            for (Iterator<String> it = places.keys(); it.hasNext(); ) {
+                String place = it.next();
+                elements.add(place);
+            }
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, elements);
