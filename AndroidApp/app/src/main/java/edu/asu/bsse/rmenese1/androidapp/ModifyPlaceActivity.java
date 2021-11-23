@@ -47,7 +47,9 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         String places = extras.getString("places");
 
         try {
-            this.places = new JSONObject(places);
+            if (places != null) {
+                this.places = new JSONObject(places);
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -57,10 +59,7 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         // Set name text view to key of place to be modified
         TextView nameTextView = findViewById(R.id.nameTextView);
         nameTextView.setText(key);
-
         setEditTextFields(key);
-
-        // TODO: Set all EditText fields to existing
 
         // Define the Submit Button Listener
         final Button submitButton = findViewById(R.id.submitButton);
@@ -93,7 +92,17 @@ public class ModifyPlaceActivity extends AppCompatActivity {
      */
     public void setEditTextFields(String key) {
         try {
-            JSONObject place = (JSONObject) this.places.get(key);
+            JSONObject place;
+            if (places != null) {
+                place = (JSONObject) this.places.get(key);
+
+            } else {
+                MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {key});
+                AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject jsonPlace = new JSONObject(ac.get().resultAsJson);
+                place = jsonPlace.getJSONObject("result");
+            }
 
             // Get text from Description Edit Text
             EditText text = findViewById(R.id.descriptionEditText);
@@ -126,11 +135,15 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could set edit text fields in modify view.");
+
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception: "+ ex.getMessage());
         }
     }
 
     /**
-     * Saves the new place to places.json. Returns true if saved.
+     * Saves the new place to places.json.
      *
      * @param key String
      */
@@ -191,8 +204,18 @@ public class ModifyPlaceActivity extends AppCompatActivity {
             longitude = 0.00;
         }
 
+        JSONObject place = new JSONObject();
         try {
-            JSONObject place = (JSONObject) this.places.get(key);
+            if (places != null) {
+                place = (JSONObject) this.places.get(key);
+
+            } else {
+                MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {key});
+                AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+                JSONObject jsonPlace = new JSONObject(ac.get().resultAsJson);
+                place = jsonPlace.getJSONObject("result");
+            }
 
             place.put("address-title", address_title);
             place.put("address-street", address_street);
@@ -207,9 +230,31 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not add JSON place object to places.");
+
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(),
+                    "Exception: "+ ex.getMessage());
         }
 
-        writePlacesToFile(this.places);
+        // Modify place in local storage if server is not up
+        if (places != null) {
+            writePlacesToFile(this.places);
+
+        } else {
+            // Send place to server
+            MethodInformation mi = new MethodInformation(null, getString(R.string.url),"add", new Object[] {place});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+            // JSONObject result = new JSONObject(ac.get().resultAsJson);
+            // System.out.println(result);
+
+            // Save place to places on server
+            mi = new MethodInformation(null, getString(R.string.url),"saveToJsonFile", new Object[] {});
+            ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+
+            // result = new JSONObject(ac.get().resultAsJson);
+            // System.out.println(result);
+        }
     }
 
     /**
