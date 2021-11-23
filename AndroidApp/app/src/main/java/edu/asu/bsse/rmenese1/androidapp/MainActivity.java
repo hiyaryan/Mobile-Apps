@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         nameButton.setOnClickListener(v -> {
             Bundle extras = new Bundle();
             extras.putString("key", key);
-            extras.putString("places", places.toString());
+
+            // Places will be null if the server is used to get a place
+            if (places != null) {
+                extras.putString("places", places.toString());
+            }
 
             Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
             intent.putExtra("ServicesActivity", extras);
