@@ -4,10 +4,8 @@ import android.os.AsyncTask;
 import android.os.Looper;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Async Collection Connect (AsyncCollectionConnect.java)
@@ -54,6 +52,7 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
             android.util.Log.d(this.getClass().getSimpleName(),
                     "exception in remote call " + ex.getMessage());
         }
+
         return request[0];
     }
 
@@ -64,55 +63,5 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
 
         android.util.Log.d(this.getClass().getSimpleName(),
                 " resulting is: " + res.resultAsJson);
-
-        try {
-            switch (res.method) {
-                case "getNames": {
-                    JSONObject jo = new JSONObject(res.resultAsJson);
-                    JSONArray ja = jo.getJSONArray("result");
-
-                    ArrayList<String> al = new ArrayList<String>();
-                    for (int i = 0; i < ja.length(); i++) {
-                        al.add(ja.getString(i));
-                    }
-
-                    String[] names = al.toArray(new String[0]);
-                    for (int i = 0; i < names.length; i++) {
-
-                    }
-                    if (names.length > 0) {
-                        try {
-                            MethodInformation mi = new MethodInformation(res.parent, res.urlString, "get", new String[]{names[0]});
-                            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-
-                        } catch (Exception ex) {
-                            android.util.Log.w(this.getClass().getSimpleName(),
-                                    "Exception processing spinner selection: " + ex.getMessage());
-                        }
-                    }
-                    break;
-                }
-                case "get": {
-                    JSONObject jo = new JSONObject(res.resultAsJson);
-
-                    break;
-                }
-                case "add":
-                    try {
-                        MethodInformation mi = new MethodInformation(res.parent, res.urlString, "getNames", new Object[]{});
-                        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-
-                    } catch (Exception ex) {
-                        android.util.Log.w(this.getClass().getSimpleName(),
-                                "Exception processing getNames: " + ex.getMessage());
-                    }
-
-                    break;
-            }
-
-        } catch (Exception ex) {
-            android.util.Log.d(this.getClass().getSimpleName(),
-                    "Exception: " + ex.getMessage());
-        }
     }
 }
