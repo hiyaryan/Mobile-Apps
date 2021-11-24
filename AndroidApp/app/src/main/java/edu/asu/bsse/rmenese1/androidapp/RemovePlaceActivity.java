@@ -1,6 +1,7 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,6 +25,8 @@ import java.io.OutputStreamWriter;
  */
 public class RemovePlaceActivity extends AppCompatActivity {
     private JSONObject places;
+    private boolean dbInitialized;
+    private PlacesContract.PlacesDbHelper dbHelper;
 
     /**
      * onCreate
@@ -34,10 +37,17 @@ public class RemovePlaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Create new instance of dbHelper
+        dbInitialized = false;
+
         Intent intent = getIntent();
         Bundle extras = intent.getBundleExtra("RemovePlaceActivity");
 
         String key = extras.getString("key");
+        if (extras.getString("dbInitialized").equals("true")) {
+            dbInitialized = true;
+            dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
+        }
         String places = extras.getString("places");
 
         try {
@@ -65,7 +75,24 @@ public class RemovePlaceActivity extends AppCompatActivity {
 
                     // If places is null the app is connected to the JsonRPC server
                     if (places != null) {
-                        removePlaceInPlaces(key);
+                        if (!dbInitialized) {
+                            android.util.Log.d("File",
+                                    this.getClass().getSimpleName() + ": Deleting " + key + " from file.");
+
+                            removePlaceInPlaces(key);
+                        } else {
+                            android.util.Log.d("DB",
+                                    this.getClass().getSimpleName() + ": Deleting " + key + " from database.");
+
+                            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                            // Look for item in db first
+                            String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                            String[] selectionArgs = { key };
+
+                            db.delete(PlacesContract.PlacesEntry.TABLE_NAME, selection, selectionArgs);
+                            db.close();
+                        }
 
                     } else {
                         try {

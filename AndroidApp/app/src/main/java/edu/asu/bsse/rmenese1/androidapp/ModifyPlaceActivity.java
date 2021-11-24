@@ -47,7 +47,6 @@ public class ModifyPlaceActivity extends AppCompatActivity {
 
         // Create new instance of dbHelper
         dbInitialized = false;
-        dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
 
         Intent intent = getIntent();
         Bundle extras = intent.getBundleExtra("ModifyPlaceActivity");
@@ -55,6 +54,7 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         String key = extras.getString("key");
         if (extras.getString("dbInitialized").equals("true")) {
             dbInitialized = true;
+            dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
         }
         String places = extras.getString("places");
 
