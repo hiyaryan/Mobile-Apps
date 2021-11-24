@@ -1,6 +1,9 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +30,8 @@ import java.io.OutputStreamWriter;
  */
 public class ModifyPlaceActivity extends AppCompatActivity {
     private JSONObject places;
+    private boolean dbInitialized;
+    private PlacesContract.PlacesDbHelper dbHelper;
 
     /**
      * onCreate
@@ -40,10 +45,17 @@ public class ModifyPlaceActivity extends AppCompatActivity {
 
         android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onCreate");
 
+        // Create new instance of dbHelper
+        dbInitialized = false;
+        dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
+
         Intent intent = getIntent();
         Bundle extras = intent.getBundleExtra("ModifyPlaceActivity");
 
         String key = extras.getString("key");
+        if (extras.getString("dbInitialized").equals("true")) {
+            dbInitialized = true;
+        }
         String places = extras.getString("places");
 
         try {
@@ -92,9 +104,22 @@ public class ModifyPlaceActivity extends AppCompatActivity {
      */
     public void setEditTextFields(String key) {
         try {
-            JSONObject place;
+            JSONObject place = new JSONObject();
+
+            // If the server is not up run using the database
             if (places != null) {
-                place = (JSONObject) this.places.get(key);
+
+                // If the database is not initialized run using the file system
+                if(!dbInitialized) {
+                    android.util.Log.d("File",
+                            this.getClass().getSimpleName() + ": Setting " + key + " fields with contents from file.");
+
+                    place = (JSONObject) this.places.get(key);
+
+                } else {
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Setting " + key + " fields with contents from database.");
+                }
 
             } else {
                 MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {key});
@@ -104,33 +129,63 @@ public class ModifyPlaceActivity extends AppCompatActivity {
                 place = jsonPlace.getJSONObject("result");
             }
 
-            // Get text from Description Edit Text
-            EditText text = findViewById(R.id.descriptionEditText);
-            text.setText(place.getString("description"));
+            // Get all of the EditText fields to set default values
+            EditText descriptionTextView = findViewById(R.id.descriptionEditText);
+            EditText categoryTextView = findViewById(R.id.categoryEditText);
+            EditText addressTitleTextView = findViewById(R.id.addressTitleEditText);
+            EditText addressStreetTextView = findViewById(R.id.addressStreetEditText);
+            EditText elevationTextView = findViewById(R.id.elevationEditText);
+            EditText latitudeTextView = findViewById(R.id.latitudeEditText);
+            EditText longitudeTextView = findViewById(R.id.longitudeEditText);
 
-            // Get text from Category Edit Text
-            text = findViewById(R.id.categoryEditText);
-            text.setText(place.getString("category"));
+            // Set default values from the file
+            if(!dbInitialized) {
+                descriptionTextView.setText(place.getString("description"));
+                categoryTextView.setText(place.getString("category"));
+                addressTitleTextView.setText(place.getString("address-title"));
+                addressStreetTextView.setText(place.getString("address-street"));
+                elevationTextView.setText(place.getString("elevation"));
+                latitudeTextView.setText(place.getString("latitude"));
+                longitudeTextView.setText(place.getString("longitude"));
 
-            // Get text from Address Title Edit Text
-            text = findViewById(R.id.addressTitleEditText);
-            text.setText(place.getString("address-title"));
+                // Set default values from the database
+            } else {
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-            // Get text from Address Street Edit Text
-            text = findViewById(R.id.addressStreetEditText);
-            text.setText(place.getString("address-street"));
+                // Look for item in db first
+                String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                String[] selectionArgs = { key };
 
-            // Get text from Elevation Edit Text
-            text = findViewById(R.id.elevationEditText);
-            text.setText(place.getString("elevation"));
+                Cursor cursor = db.query(
+                        PlacesContract.PlacesEntry.TABLE_NAME,
+                        null,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
 
-            // Get text from Latitude Edit Text
-            text = findViewById(R.id.latitudeEditText);
-            text.setText(place.getString("latitude"));
+                cursor.moveToFirst();
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_DESCRIPTION));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_CATEGORY));
+                String address_title = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_TITLE));
+                String address_street = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_STREET));
+                String elevation = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ELEVATION));
+                String latitude = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE));
+                String longitude = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE));
 
-            // Get text from Longitude Edit Text
-            text = findViewById(R.id.longitudeEditText);
-            text.setText(place.getString("longitude"));
+                descriptionTextView.setText(description);
+                categoryTextView.setText(category);
+                addressTitleTextView.setText(address_title);
+                addressStreetTextView.setText(address_street);
+                elevationTextView.setText(elevation);
+                latitudeTextView.setText(latitude);
+                longitudeTextView.setText(longitude);
+
+                cursor.close();
+                db.close();
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -207,7 +262,16 @@ public class ModifyPlaceActivity extends AppCompatActivity {
         JSONObject place = new JSONObject();
         try {
             if (places != null) {
-                place = (JSONObject) this.places.get(key);
+                if(!dbInitialized) {
+                    android.util.Log.d("File",
+                            this.getClass().getSimpleName() + ": Updating " + key + " fields in file system.");
+
+                    place = (JSONObject) this.places.get(key);
+
+                } else {
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Updating " + key + " fields in database.");
+                }
 
             } else {
                 MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {key});
@@ -217,15 +281,38 @@ public class ModifyPlaceActivity extends AppCompatActivity {
                 place = jsonPlace.getJSONObject("result");
             }
 
-            place.put("address-title", address_title);
-            place.put("address-street", address_street);
-            place.put("elevation", elevation);
-            place.put("latitude", latitude);
-            place.put("longitude", longitude);
-            place.put("name", key);
-            place.put("image", "");
-            place.put("description", description);
-            place.put("category", category);
+            // Use the place json object to update file system or server
+            if (!dbInitialized) {
+                place.put("address-title", address_title);
+                place.put("address-street", address_street);
+                place.put("elevation", elevation);
+                place.put("latitude", latitude);
+                place.put("longitude", longitude);
+                place.put("name", key);
+                place.put("image", "");
+                place.put("description", description);
+                place.put("category", category);
+
+                // Directly update the fields in the database
+            } else {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                // Look for item in db first
+                String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                String[] selectionArgs = { key };
+
+                ContentValues cv = new ContentValues();
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_DESCRIPTION, description);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_CATEGORY, category);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_TITLE, address_title);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_STREET, address_street);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_ELEVATION, elevation);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE, latitude);
+                cv.put(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE, longitude);
+
+                db.update(PlacesContract.PlacesEntry.TABLE_NAME, cv, selection, selectionArgs);
+                db.close();
+            }
 
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -238,7 +325,17 @@ public class ModifyPlaceActivity extends AppCompatActivity {
 
         // Modify place in local storage if server is not up
         if (places != null) {
-            writePlacesToFile(this.places);
+            // Modify place in file if database is not initialized
+            if (!dbInitialized) {
+                android.util.Log.d("File",
+                        this.getClass().getSimpleName() + ": Writing updated " + key + " to file.");
+
+                writePlacesToFile(this.places);
+
+            } else {
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Updated " + key + " in database.");
+            }
 
         } else {
             // Send place to server
