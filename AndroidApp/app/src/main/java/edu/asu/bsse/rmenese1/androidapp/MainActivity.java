@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 extras.putString("places", places.toString());
             }
 
+            extras.putString("dbInitialized", String.valueOf(dbInitialized));
+
             Intent intent = new Intent(MainActivity.this, ServicesActivity.class);
             intent.putExtra("ServicesActivity", extras);
             MainActivity.this.startActivity(intent);
@@ -183,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // If the server is up the class attribute places will be null
             // Therefore based on the selected spinner item, the place object will
             // need to be called from the server
-            JSONObject place;
+            JSONObject place = new JSONObject();
             if (this.places == null) {
                 MethodInformation mi = new MethodInformation(this, getString(R.string.url),"get", new Object[] {key});
                 AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
@@ -192,7 +194,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 place = jsonPlace.getJSONObject("result");
 
             } else {
-                place = this.places.getJSONObject(this.key);
+                if (!this.dbInitialized) {
+
+                    place = this.places.getJSONObject(this.key);
+                } else {
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Setting " + this.key + " fields with contents from database.");
+                }
             }
 
             Button nameButton = findViewById(R.id.nameButton);
@@ -215,9 +223,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 longitudeTextView.setText(place.getString("longitude"));
 
             } else {
-                android.util.Log.d("DB",
-                        this.getClass().getSimpleName() + ": Setting view to " + this.key + " from contents in database.");
-
                 SQLiteDatabase db = dbHelper.getReadableDatabase();
 
                 // Look for item in db
@@ -348,11 +353,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     String place = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
-
-                    android.util.Log.d("DB",
-                            this.getClass().getSimpleName() + ": Adding " + place + " to spinner.");
                     elements.add(place);
-
                     cursor.moveToNext();
                 }
 
@@ -375,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         StringBuilder places = new StringBuilder();
         try {
             android.util.Log.d("File",
-                    this.getClass().getSimpleName() + ": Checking internal storage for file...");
+                    this.getClass().getSimpleName() + ": Checking internal storage...");
 
             FileInputStream fis = openFileInput("places.json");
             InputStreamReader isr = new InputStreamReader(fis);
@@ -443,19 +444,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         null
                 );
 
-                boolean placeExists = false;
-                while(cursor.moveToNext()) {
-                    String name = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
-
+                if(cursor.moveToNext()) {
                     android.util.Log.d("DB",
-                            this.getClass().getSimpleName() + ": Found " + name + " in database.");
+                            this.getClass().getSimpleName() + ": Found database.");
 
-                    placeExists = true;
-                }
+                    cursor.close();
+                    db.close();
 
-                cursor.close();
+                    this.dbInitialized = true;
+                    return;
 
-                if (!placeExists) {
+                } else  {
                     // Add new rows to database
                     ContentValues values = new ContentValues();
 

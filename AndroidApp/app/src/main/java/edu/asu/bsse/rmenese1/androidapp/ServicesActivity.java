@@ -29,7 +29,6 @@ public class ServicesActivity extends AppCompatActivity {
         Bundle extras = intent.getBundleExtra("ServicesActivity");
 
         String key = extras.getString("key");
-        String places = extras.getString("places");
 
         Button modifyButton = findViewById(R.id.modifyButton);
         modifyButton.setText(String.format("Modify\n %s", key));
@@ -41,7 +40,7 @@ public class ServicesActivity extends AppCompatActivity {
         final Button addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(v -> {
             Intent intent1 = new Intent(ServicesActivity.this, AddPlaceActivity.class);
-            intent1.putExtra("places", places);
+            intent1.putExtra("AddPlaceActivity", extras);
             ServicesActivity.this.startActivity(intent1);
         });
 

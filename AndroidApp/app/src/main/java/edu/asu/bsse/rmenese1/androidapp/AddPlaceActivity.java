@@ -1,6 +1,9 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +31,8 @@ import java.util.Iterator;
  */
 public class AddPlaceActivity extends AppCompatActivity {
     private JSONObject places;
+    private boolean dbInitialized;
+    private PlacesContract.PlacesDbHelper dbHelper;
 
     /**
      * onCreate
@@ -41,8 +46,15 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onCreate");
 
+        // Create new instance of dbHelper
+        dbInitialized = false;
+        dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
+
         Intent intent = getIntent();
-        String places = intent.getStringExtra("places");
+        Bundle extras = intent.getBundleExtra("AddPlaceActivity");
+
+        dbInitialized = Boolean.getBoolean(extras.getString("dbInitialized"));
+        String places = extras.getString("places");
 
         try {
             if (places != null) {
@@ -103,7 +115,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                 } else {
                     new AlertDialog.Builder(AddPlaceActivity.this)
                             .setTitle("Alert")
-                            .setMessage("Name is a required field.")
+                            .setMessage("Name is a required and unique field.")
                             .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                                 android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                                         + "Submitted without required name field.");
@@ -224,17 +236,23 @@ public class AddPlaceActivity extends AppCompatActivity {
         try {
             // If the user input a name continue processing else return false.
             if (!place.get("name").toString().equals("")) {
-                places.put(place.get("name").toString(), place);
 
-                // Fill JSON object with existing places
-                for (Iterator<String> it = this.places.keys(); it.hasNext(); ) {
-                    String key = it.next();
-                    places.put(key, this.places.get(key));
+                // If the db is not initialized write to file
+                if(dbInitialized) {
+                    places.put(place.get("name").toString(), place);
+
+                    // Fill JSON object with existing places
+                    for (Iterator<String> it = this.places.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        places.put(key, this.places.get(key));
+                    }
+
+                    writePlacesToFile(places);
+                    return true;
+
+                } else {
+                    return savePlaceToDb(place);
                 }
-
-                writePlacesToFile(places);
-
-                return true;
             }
         } catch (JSONException je) {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
@@ -265,6 +283,85 @@ public class AddPlaceActivity extends AppCompatActivity {
             android.util.Log.d("Error", this.getClass().getSimpleName() + ": "
                     + "Could not write to file.");
         }
+    }
+
+    /**
+     * Save new place to database.
+     *
+     * @param place JSONObject
+     * @return isDuplicate
+     */
+    private boolean savePlaceToDb(JSONObject place) {
+        android.util.Log.d("DB", this.getClass().getSimpleName() + ": "
+                + "Saving new place to database...");
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        try {
+            // Look for item in db first
+            String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+            String[] selectionArgs = { place.getString("name") };
+
+            Cursor cursor = db.query(
+                    PlacesContract.PlacesEntry.TABLE_NAME,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
+            );
+
+            boolean placeExists = false;
+            while(cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
+
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Found " + name + " in database.");
+
+                placeExists = true;
+            }
+
+            cursor.close();
+
+            if (!placeExists) {
+                // Add new rows to database
+                ContentValues values = new ContentValues();
+
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_NAME, place.getString("name"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_DESCRIPTION, place.getString("description"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_CATEGORY, place.getString("category"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_TITLE, place.getString("address-title"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_STREET, place.getString("address-street"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ELEVATION, place.getDouble("elevation"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE, place.getDouble("latitude"));
+                values.put(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE, place.getDouble("longitude"));
+
+                // Add values to new row
+                long newRowId = db.insert(PlacesContract.PlacesEntry.TABLE_NAME, null, values);
+
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Added new row -> " + newRowId + ": " + place.getString("name"));
+
+                return true;
+            }
+
+        } catch (JSONException je) {
+            android.util.Log.d("Error",
+                    this.getClass().getSimpleName() + ": Could not parse JSON.");
+
+        } catch (Exception e) {
+            android.util.Log.d("Exception",
+                    this.getClass().getSimpleName() + ": Could not initialize database.");
+
+        } finally {
+            db.close();
+        }
+
+        android.util.Log.d("Exception",
+                this.getClass().getSimpleName() + ": Duplicate names found.");
+
+        return false;
     }
 
     /**
