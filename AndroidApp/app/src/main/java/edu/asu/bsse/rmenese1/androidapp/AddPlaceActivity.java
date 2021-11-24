@@ -53,7 +53,9 @@ public class AddPlaceActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getBundleExtra("AddPlaceActivity");
 
-        dbInitialized = Boolean.getBoolean(extras.getString("dbInitialized"));
+        if (extras.getString("dbInitialized").equals("true")) {
+            dbInitialized = true;
+        }
         String places = extras.getString("places");
 
         try {
@@ -238,7 +240,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             if (!place.get("name").toString().equals("")) {
 
                 // If the db is not initialized write to file
-                if(dbInitialized) {
+                if(!dbInitialized) {
                     places.put(place.get("name").toString(), place);
 
                     // Fill JSON object with existing places
