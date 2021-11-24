@@ -2,7 +2,10 @@ package edu.asu.bsse.rmenese1.androidapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -35,6 +38,7 @@ import java.util.Iterator;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private JSONObject places;
     private String key = "ASU-Poly";
+    private PlacesContract.PlacesDbHelper dbHelper;
 
     /**
      * onCreate
@@ -45,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create new instance of dbHelper
+        dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
 
         // Create a Set the Spinner with an array of Places
         Spinner spinner = findViewById(R.id.placesSpinner);
@@ -283,10 +290,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // If places is null run the app using local storage.
         if (places == null) {
             places = readPlacesFile();
+            boolean dbInitialized = initPlacesDb(places);
 
-            for (Iterator<String> it = places.keys(); it.hasNext(); ) {
-                String place = it.next();
-                elements.add(place);
+            // If there was an error initializing the database
+            if(!dbInitialized) {
+                for (Iterator<String> it = places.keys(); it.hasNext(); ) {
+                    String place = it.next();
+                    elements.add(place);
+                }
+
+            } else {
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                String selectQuery = "SELECT * FROM " + PlacesContract.PlacesEntry.TABLE_NAME;
+                Cursor cursor = db.rawQuery(selectQuery, null);
+
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String place = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
+
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Adding " + place + " to spinner.");
+                    elements.add(place);
+
+                    cursor.moveToNext();
+                }
+
+                cursor.close();
+                db.close();
             }
         }
 
@@ -343,5 +374,84 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         return this.places;
+    }
+
+    /**
+     * Initialize the SQLite database.
+     *
+     * @param places Places
+     * @return dbInitialized
+     */
+    private boolean initPlacesDb(JSONObject places) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Add values to the database
+        for (Iterator<String> it = places.keys(); it.hasNext(); ) {
+            String place = it.next();
+
+            try {
+                // Look for item in db first
+                String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                String[] selectionArgs = { places.getJSONObject(place).getString("name") };
+
+                Cursor cursor = db.query(
+                        PlacesContract.PlacesEntry.TABLE_NAME,
+                        null,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
+
+                boolean placeExists = false;
+                while(cursor.moveToNext()) {
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
+
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Found " + name + " in database.");
+
+                    placeExists = true;
+                }
+
+                cursor.close();
+
+                if (!placeExists) {
+                    // Add new rows to database
+                    ContentValues values = new ContentValues();
+
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_NAME, places.getJSONObject(place).getString("name"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_DESCRIPTION, places.getJSONObject(place).getString("description"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_CATEGORY, places.getJSONObject(place).getString("category"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_TITLE, places.getJSONObject(place).getString("address-title"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_STREET, places.getJSONObject(place).getString("address-street"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_ELEVATION, places.getJSONObject(place).getDouble("elevation"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE, places.getJSONObject(place).getDouble("latitude"));
+                    values.put(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE, places.getJSONObject(place).getDouble("longitude"));
+
+                    // Add values to new row
+                    long newRowId = db.insert(PlacesContract.PlacesEntry.TABLE_NAME, null, values);
+
+                    android.util.Log.d("DB",
+                            this.getClass().getSimpleName() + ": Added new row -> " + newRowId + ": " + places.getJSONObject(place).getString("name"));
+                }
+
+            } catch (JSONException je) {
+                android.util.Log.d("Error",
+                        this.getClass().getSimpleName() + ": Could not parse JSON.");
+
+                db.close();
+                return false;
+            } catch (Exception e) {
+                android.util.Log.d("Exception",
+                        this.getClass().getSimpleName() + ": Could not initialize database.");
+
+                db.close();
+                return false;
+            }
+        }
+
+        db.close();
+        return true;
     }
 }
