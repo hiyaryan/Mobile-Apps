@@ -25,35 +25,35 @@ This project is for the Android mobile app. The app demonstrates three requireme
 
 #### HOWTO
 - To get a place on the home page (Place Description View), 
-1. Tap on the spinner (the downward arrow above the "Name" button).
-2. Select an item from the spinner.
-3. Note: The test button on the main view presents the Life Cycle methods in the console as required by Lab Exercise 2: Life-cycles
+    1. Tap on the spinner (the downward arrow above the "Name" button).
+    2. Select an item from the spinner.
+    3. Note: The test button on the main view presents the Life Cycle methods in the console as required by Lab Exercise 2: Life-cycles
 
 - To add a new place to places
-1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
-2. On the Services View select Add Place to navigate to the Add View
-3. On the Add View, fill out the Edit Text fields ("Name" is a required field) and press submit
-4. On the home page, click on the spinner and select the newly added place to view. 
-5. Note: The Clear button on the Add View clears all Edit Text fields
+    1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
+    2. On the Services View select Add Place to navigate to the Add View
+    3. On the Add View, fill out the Edit Text fields ("Name" is a required field) and press submit
+    4. On the home page, click on the spinner and select the newly added place to view. 
+    5. Note: The Clear button on the Add View clears all Edit Text fields
 
 - To delete a place
-1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
-2. On the Services View select Remove <Name>
-3. Select OK to delete the place or Cancel to navigate back to the main page.
+    1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
+    2. On the Services View select Remove <Name>
+    3. Select OK to delete the place or Cancel to navigate back to the main page.
 
 - To modify a place
-1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
-2. On the Services View select Modify <Name>
-3. On the Modify View, fill out the Edit Text fields ("Name" is a required field) and press submit
-4. On the home page, click on the spinner and select the place that was modifed to view changes. 
-5. Note: The Clear button on the Modify View clears all Edit Text fields
+    1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
+    2. On the Services View select Modify <Name>
+    3. On the Modify View, fill out the Edit Text fields ("Name" is a required field) and press submit
+    4. On the home page, click on the spinner and select the place that was modifed to view changes. 
+    5. Note: The Clear button on the Modify View clears all Edit Text fields
 
 - To find the Great Circle distance and Initial Bearing between to places
-1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
-2. On the Services View select Find Distance
-3. On the Calc Distance View the first spinner is the "from place"
-4. On the Calc Distance View the second spinner is the "to place"
-5. The distance and bearing are automatically calculated when either spinner changes the selected item
+    1. On the home page (Place Description View) tap the "Name" button to navigate to the Services View
+    2. On the Services View select Find Distance
+    3. On the Calc Distance View the first spinner is the "from place"
+    4. On the Calc Distance View the second spinner is the "to place"
+    5. The distance and bearing are automatically calculated when either spinner changes the selected item
 
 ### iOSApp
 
