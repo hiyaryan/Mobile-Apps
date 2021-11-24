@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private JSONObject places;
     private String key = "ASU-Poly";
     private PlacesContract.PlacesDbHelper dbHelper;
+    private boolean dbInitialized;
 
     /**
      * onCreate
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         // Create new instance of dbHelper
+        dbInitialized = false;
         dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
 
         // Create a Set the Spinner with an array of Places
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // If the server is up the class attribute places will be null
             // Therefore based on the selected spinner item, the place object will
             // need to be called from the server
-            JSONObject place = new JSONObject();
+            JSONObject place;
             if (this.places == null) {
                 MethodInformation mi = new MethodInformation(this, getString(R.string.url),"get", new Object[] {key});
                 AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
@@ -194,28 +196,66 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
             Button nameButton = findViewById(R.id.nameButton);
-            nameButton.setText(this.key);
-
             TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-            descriptionTextView.setText(place.getString("description"));
-
             TextView categoryTextView = findViewById(R.id.categoryTextView);
-            categoryTextView.setText(place.getString("category"));
-
             TextView addressTitleTextView = findViewById(R.id.addressTitleTextView);
-            addressTitleTextView.setText(place.getString("address-title"));
-
             TextView addressStreetTextView = findViewById(R.id.addressStreetTextView);
-            addressStreetTextView.setText(place.getString("address-street"));
-
             TextView elevationTextView = findViewById(R.id.elevationTextView);
-            elevationTextView.setText(place.getString("elevation"));
-
             TextView latitudeTextView = findViewById(R.id.latitudeTextView);
-            latitudeTextView.setText(place.getString("latitude"));
-
             TextView longitudeTextView = findViewById(R.id.longitudeTextView);
-            longitudeTextView.setText(place.getString("longitude"));
+
+            if (!this.dbInitialized) {
+                nameButton.setText(this.key);
+                descriptionTextView.setText(place.getString("description"));
+                categoryTextView.setText(place.getString("category"));
+                addressTitleTextView.setText(place.getString("address-title"));
+                addressStreetTextView.setText(place.getString("address-street"));
+                elevationTextView.setText(place.getString("elevation"));
+                latitudeTextView.setText(place.getString("latitude"));
+                longitudeTextView.setText(place.getString("longitude"));
+
+            } else {
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Setting view to " + this.key + " from contents in database.");
+
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                // Look for item in db
+                String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                String[] selectionArgs = { this.key };
+
+                Cursor cursor = db.query(
+                        PlacesContract.PlacesEntry.TABLE_NAME,
+                        null,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
+
+                cursor.moveToFirst();
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_DESCRIPTION));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_CATEGORY));
+                String address_title = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_TITLE));
+                String address_street = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ADDRESS_STREET));
+                String elevation = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_ELEVATION));
+                String latitude = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE));
+                String longitude = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE));
+
+                nameButton.setText(name);
+                descriptionTextView.setText(description);
+                categoryTextView.setText(category);
+                addressTitleTextView.setText(address_title);
+                addressStreetTextView.setText(address_street);
+                elevationTextView.setText(elevation);
+                latitudeTextView.setText(latitude);
+                longitudeTextView.setText(longitude);
+
+                cursor.close();
+                db.close();
+            }
 
         } catch (JSONException e) {
             System.out.println("Setting default place " + this.key);
@@ -268,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayList<String> elements = new ArrayList<>();
 
         // Try initializing the app using JsonRPC server.
-        try{
+        try {
             MethodInformation mi = new MethodInformation(this, getString(R.string.url),"getNames", new Object[] {});
             AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
@@ -290,10 +330,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // If places is null run the app using local storage.
         if (places == null) {
             places = readPlacesFile();
-            boolean dbInitialized = initPlacesDb(places);
+            initPlacesDb(places);
 
             // If there was an error initializing the database
-            if(!dbInitialized) {
+            if (!dbInitialized) {
                 for (Iterator<String> it = places.keys(); it.hasNext(); ) {
                     String place = it.next();
                     elements.add(place);
@@ -380,9 +420,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * Initialize the SQLite database.
      *
      * @param places Places
-     * @return dbInitialized
      */
-    private boolean initPlacesDb(JSONObject places) {
+    private void initPlacesDb(JSONObject places) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Add values to the database
@@ -441,17 +480,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         this.getClass().getSimpleName() + ": Could not parse JSON.");
 
                 db.close();
-                return false;
             } catch (Exception e) {
                 android.util.Log.d("Exception",
                         this.getClass().getSimpleName() + ": Could not initialize database.");
 
                 db.close();
-                return false;
             }
         }
 
         db.close();
-        return true;
+        this.dbInitialized = true;
     }
 }
