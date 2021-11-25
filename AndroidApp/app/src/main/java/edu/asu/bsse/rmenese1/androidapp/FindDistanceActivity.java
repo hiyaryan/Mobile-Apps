@@ -1,6 +1,8 @@
 package edu.asu.bsse.rmenese1.androidapp;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +33,8 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
     private String key;
     private String fromPlace;
     private String toPlace;
+    private boolean dbInitialized;
+    private PlacesContract.PlacesDbHelper dbHelper;
 
     /**
      * onCreate
@@ -43,11 +47,18 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         setContentView(R.layout.activity_distance);
 
         android.util.Log.d("LifeCycleMethod", this.getClass().getSimpleName() + ": " + "onCreate");
-        
+
+        // Create new instance of dbHelper
+        dbInitialized = false;
+
         Intent intent = getIntent();
         Bundle extras = intent.getBundleExtra("FindDistanceActivity");
 
         this.key = extras.getString("key");
+        if (extras.getString("dbInitialized").equals("true")) {
+            dbInitialized = true;
+            dbHelper = new PlacesContract.PlacesDbHelper(getBaseContext());
+        }
         String places = extras.getString("places");
 
         try {
@@ -100,13 +111,73 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         }
 
         try {
-            JSONObject fromPlace;
-            JSONObject toPlace;
+            JSONObject fromPlace = new JSONObject();
+            JSONObject toPlace = new JSONObject();
             if (places != null) {
-                fromPlace = this.places.getJSONObject(this.fromPlace);
-                toPlace = this.places.getJSONObject(this.toPlace);
+                if (!dbInitialized) {
+                    android.util.Log.d("File",
+                            this.getClass().getSimpleName() + ": Setting places from file.");
+
+                    fromPlace = this.places.getJSONObject(this.fromPlace);
+                    toPlace = this.places.getJSONObject(this.toPlace);
+
+                } else {
+                    android.util.Log.d("Database",
+                            this.getClass().getSimpleName() + ": Setting places from database.");
+
+                    SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                    // Build fromPlace object from database
+                    String selection = PlacesContract.PlacesEntry.COLUMN_NAME_NAME + " = ?";
+                    String[] selectionArgs1 = { this.fromPlace };
+
+                    Cursor from = db.query(
+                            PlacesContract.PlacesEntry.TABLE_NAME,
+                            null,
+                            selection,
+                            selectionArgs1,
+                            null,
+                            null,
+                            null
+                    );
+
+                    from.moveToFirst();
+                    Double lat1 = from.getDouble(from.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE));
+                    Double lon1 = from.getDouble(from.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE));
+
+                    fromPlace.put("latitude", lat1);
+                    fromPlace.put("longitude", lon1);
+
+                    from.close();
+
+                    // Build toPlace object from database
+                    String[] selectionArgs2 = { this.toPlace };
+
+                    Cursor to = db.query(
+                            PlacesContract.PlacesEntry.TABLE_NAME,
+                            null,
+                            selection,
+                            selectionArgs2,
+                            null,
+                            null,
+                            null
+                    );
+
+                    to.moveToFirst();
+                    Double lat2 = to.getDouble(to.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LATITUDE));
+                    Double lon2 = to.getDouble(to.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_LONGITUDE));
+
+                    toPlace.put("latitude", lat2);
+                    toPlace.put("longitude", lon2);
+
+                    to.close();
+                    db.close();
+                }
 
             } else {
+                android.util.Log.d("JsonRPC",
+                        this.getClass().getSimpleName() + ": Setting places from server.");
+
                 MethodInformation mi = new MethodInformation(null, getString(R.string.url),"get", new Object[] {this.fromPlace});
                 AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
 
@@ -152,11 +223,39 @@ public class FindDistanceActivity extends AppCompatActivity implements AdapterVi
         ArrayList<String> elements = new ArrayList<>();
 
         if (places != null) {
-            for (Iterator<String> it = places.keys(); it.hasNext(); ) {
-                String place = it.next();
-                elements.add(place);
+            // Use the file system places if database is down
+            if (!dbInitialized) {
+                android.util.Log.d("File",
+                        this.getClass().getSimpleName() + ": Reading places set by file.");
+
+                for (Iterator<String> it = places.keys(); it.hasNext(); ) {
+                    String place = it.next();
+                    elements.add(place);
+                }
+
+            } else {
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Reading places from database.");
+
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                String selectQuery = "SELECT * FROM " + PlacesContract.PlacesEntry.TABLE_NAME;
+                Cursor cursor = db.rawQuery(selectQuery, null);
+
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String place = cursor.getString(cursor.getColumnIndexOrThrow(PlacesContract.PlacesEntry.COLUMN_NAME_NAME));
+                    elements.add(place);
+                    cursor.moveToNext();
+                }
+
+                cursor.close();
+                db.close();
             }
         } else {
+            android.util.Log.d("JsonRPC",
+                    this.getClass().getSimpleName() + ": Reading places from server.");
+
             try {
                 MethodInformation mi = new MethodInformation(null, getString(R.string.url), "getNames", new Object[]{});
                 AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
