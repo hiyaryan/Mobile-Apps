@@ -28,11 +28,16 @@ public class AlertActivity extends AppCompatActivity {
         Bundle extras = intent.getBundleExtra("AlertActivity");
 
         String hello = extras.getString("hello");
-
         boolean test = !extras.getString("test").equals("true");
+        String title;
+        if (test) {
+            title = "File Mode";
+        } else {
+            title = "Database Mode";
+        }
 
         new AlertDialog.Builder(AlertActivity.this)
-                .setTitle("Alert")
+                .setTitle(title)
                 .setMessage(hello)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     Intent intent1 = new Intent(AlertActivity.this, MainActivity.class);
