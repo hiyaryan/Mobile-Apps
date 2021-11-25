@@ -19,6 +19,22 @@ This project is for the Android mobile app. The app demonstrates three requireme
 - Local Storage: This is where the "file-version" and "SQLite-version" of the app stores data
 - PlaceJsonRPCServer: http://127.0.0.1:8080
 
+#### Special Features
+This app has three different modes: Server, Database, and File. These modes determine what data model the app will use. The following provides more details and instructions on how to switch between modes. In summary, the TEST button toggles between Database and File, one of which will be used only if the Server is down.
+1. Server Mode (PRIMARY)
+    - This mode takes precedence over all other modes **only when the server is running**. If the server crashes or is taken down, the following message *"Unfortunately, Place Description has stopped"* will prompt the user something went wrong. This might mislead one to think the app has crashed but the app will reload itself and enter into either Database mode or File mode depending on if the user pressed the TEST button while in Server Mode.
+    - HOWTO: To run the app in Server mode, follow all the steps in the STARTUP procedures below.
+2. Database Mode (DEFAULT)
+    - This mode is the default mode *if the server is not up when the App starts*. In this mode the data model for the App will be an SQLite database Places.db. 
+    - HOWTO: To run the app in Database Mode, start the app without the server, **skip the first step in the STARTUP procedues below**. *If the server is on, the App will detect it and switch to Server Mode effectively taking it out of Database Mode.*
+3. File Mode (SECONDARY)
+    - This mode is the secondary mode if the server is not up when the app starts **and** if the database fails or the TEST button is toggled. In this mode the data model for the App will be from the File places.json. 
+    - HOWTO: To run the app in File Mode, start the app without the server **and** click TEST on the bottom right, i.e. **skip the first step in the STARTUP procedues below and click TEST**. *If the server is on, the App will detect it and switch to Server Mode effectively taking it out of File Mode.* To switch back to Database Mode, simply press the TEST button again. 
+
+Notes: 
+- Even though the Alert window after pressing the TEST button shows File Mode or Database Mode, "this has no effect on the App if the server is running". If the server were to crash or go down, the last mode seen in the Alert window is what the App will fall back onto.
+- To test this thoroughly, it is suggested to create a new place on each mode seprately and switch between them. Each model will hold different places. Comments can also be seen in the debugger although it can be quote verbose.
+
 #### STARTUP
 1. Spin-up the server: navigate to PlaceJsonRPCServer execute `java -jar lib/placeserver.jar 8080`
 2. Open the AndroidApp in Android Studio and start a new simulation
@@ -54,6 +70,7 @@ This project is for the Android mobile app. The app demonstrates three requireme
     3. On the Calc Distance View the first spinner is the "from place"
     4. On the Calc Distance View the second spinner is the "to place"
     5. The distance and bearing are automatically calculated when either spinner changes the selected item
+
 
 ### iOSApp
 
