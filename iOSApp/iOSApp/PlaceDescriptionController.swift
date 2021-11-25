@@ -3,7 +3,12 @@
 //  iOSApp
 //
 //  Created by Ryan Meneses on 11/1/21.
-//  Copyright © 2021 Ryan Meneses. All rights reserved.
+//  Copyright © 2021 Ryan Meneses. All rights reserved. The SER423 Instructional Team and Arizona State University
+//  have the right to build and evaluate this software package for the purposes of grading and program assessment.
+//
+//  @author Ryan Meneses     mailto: rmenese1@asu.edu
+//  @version 1.0
+//  @since November 1, 2021
 //
 
 import UIKit
