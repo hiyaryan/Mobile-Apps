@@ -25,13 +25,18 @@ public class AlertActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        String value = intent.getStringExtra("AlertActivity");
+        Bundle extras = intent.getBundleExtra("AlertActivity");
+
+        String hello = extras.getString("hello");
+
+        boolean test = !extras.getString("test").equals("true");
 
         new AlertDialog.Builder(AlertActivity.this)
                 .setTitle("Alert")
-                .setMessage(value)
+                .setMessage(hello)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     Intent intent1 = new Intent(AlertActivity.this, MainActivity.class);
+                    intent1.putExtra("test", String.valueOf(test));
                     AlertActivity.this.startActivity(intent1);
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)

@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String key = "ASU-Poly";
     private PlacesContract.PlacesDbHelper dbHelper;
     private boolean dbInitialized;
+    private boolean test = false;
 
     /**
      * onCreate
@@ -52,6 +53,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent testIntent = getIntent();
+        String test = testIntent.getStringExtra("test");
+
+        // Test button toggles app between file and database versions.
+        if (test != null) {
+            if (test.equals("true")) {
+                android.util.Log.d("File",
+                        this.getClass().getSimpleName() + ": Switching to file mode.");
+
+                this.test = true;
+            } else {
+                android.util.Log.d("DB",
+                        this.getClass().getSimpleName() + ": Switching to database mode.");
+
+                this.test = false;
+            }
+
+            // Default App uses database model.
+        } else {
+            this.test = false;
+        }
 
         // Create new instance of dbHelper
         dbInitialized = false;
@@ -91,8 +114,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Define the Test Button Listener
         final Button testButton = findViewById(R.id.testButton);
         testButton.setOnClickListener(v -> {
+            Bundle extras = new Bundle();
+            extras.putString("hello", "Hello Android Developer");
+            extras.putString("test", String.valueOf(test));
+
             Intent intent = new Intent(MainActivity.this, AlertActivity.class);
-            intent.putExtra("AlertActivity", "Hello Android Developer");
+            intent.putExtra("AlertActivity", extras);
             MainActivity.this.startActivity(intent);
         });
     }
@@ -338,7 +365,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // If places is null run the app using local storage.
         if (places == null) {
             places = readPlacesFile();
-            this.dbInitialized = initPlacesDb(places);
+
+            // Pressing the test button effectively keeps dbInitialized false
+            if (!this.test) {
+                this.dbInitialized = initPlacesDb(places);
+            }
 
             // If there was an error initializing the database run the app using the file system
             if (!this.dbInitialized) {
@@ -425,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         return this.places;
     }
-    
+
     /**
      * Initialize the SQLite database.
      *
