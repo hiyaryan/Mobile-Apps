@@ -16,9 +16,9 @@ import java.util.zip.GZIPInputStream;
  * This class connects via an HTTP post request to the PlaceJsonRPCServer. It uses JsonRPC
  * sending a request containing the method and parameters and expects a response from the server
  * based on the request. Adopted and refactored from the in-class project
- * StudentJsonRPCClientViaAsyncTask presented by Tim Lindquist.
+ * StudentJsonRPCClientViaAsyncTask presented by Copyright 2020 Tim Lindquist.
  *
- * @author Ryan Meneses
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
  * @version 1.0
  * @since November 23, 2021
  */

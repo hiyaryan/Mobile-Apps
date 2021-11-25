@@ -24,7 +24,11 @@ import java.io.OutputStreamWriter;
  * Modify Place Activity (ModifyPlaceActivity.java)
  * This activity allows the user to modify an existing place.
  *
- * @author Ryan Meneses
+ * Copyright 2021 Ryan Meneses. The SER423 Instructional Team and Arizona State University
+ * have the right to build and evaluate this software package for the purposes of grading
+ * and program assessment.
+ *
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
  * @version 1.0
  * @since November 21, 2021
  */

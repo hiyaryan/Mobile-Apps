@@ -8,9 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Alert Activity (AlertActivity.java)
- * This is the alert activity controller.
+ * This is the alert activity controller. It doubles as presenting the Life-cycle methods
+ * for Lab Exercise 2 in the console and toggling between File Mode and Database Mode.
  *
- * @author Ryan Meneses
+ * Copyright 2021 Ryan Meneses. The SER423 Instructional Team and Arizona State University
+ * have the right to build and evaluate this software package for the purposes of grading
+ * and program assessment.
+ *
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
  * @version 1.0
  * @since November 19, 2021
  */

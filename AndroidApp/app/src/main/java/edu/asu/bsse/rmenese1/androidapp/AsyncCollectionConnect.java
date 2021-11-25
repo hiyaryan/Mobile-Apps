@@ -12,9 +12,9 @@ import java.net.URL;
  *
  * This class sets up an asynchronous connection prior to connecting to the PlaceJsonRPCServer.
  * Adopted and refactored from the in-class project StudentJsonRPCClientViaAsyncTask presented by
- * Tim Lindquist.
+ * Copyright 2020 Tim Lindquist.
  *
- * @author Ryan Meneses
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
  * @version 1.0
  * @since November 23, 2021
  */

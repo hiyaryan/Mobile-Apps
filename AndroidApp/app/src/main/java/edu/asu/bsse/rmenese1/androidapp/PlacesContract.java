@@ -5,6 +5,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+/**
+ * Places Contract (PlacesContract.java)
+ * This class provides the schema for the SQLite Database and helper methods.
+ *
+ * Copyright 2021 Ryan Meneses. The SER423 Instructional Team and Arizona State University
+ * have the right to build and evaluate this software package for the purposes of grading
+ * and program assessment.
+ *
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
+ * @version 1.0
+ * @since November 21, 2021
+ */
 public final class PlacesContract {
     private static final String SQL_CREATE_PLACES =
             "CREATE TABLE " + PlacesEntry.TABLE_NAME + " ("

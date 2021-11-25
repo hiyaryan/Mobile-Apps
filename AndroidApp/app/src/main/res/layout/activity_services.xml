@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Activity Services (activity_main.xml) -->
-<!-- This is the services activity view. -->
-
-<!-- author: Ryan Meneses -->
-<!-- version: 1.0 -->
-<!-- since: November 19, 2021 -->
+<!--/**
+ * Activity Services (activity_services.xml)
+ * This is the Services view.
+ *
+ * Copyright 2021 Ryan Meneses. The SER423 Instructional Team and Arizona State University
+ * have the right to build and evaluate this software package for the purposes of grading
+ * and program assessment.
+ *
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
+ * @version 1.0
+ * @since November 19, 2021
+ */-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

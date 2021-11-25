@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Activity Add (activity_add.xml) -->
-<!-- This is the add place activity view. -->
-
-<!-- author: Ryan Meneses -->
-<!-- version: 1.0 -->
-<!-- since: November 21, 2021 -->
+<!--/**
+ * Activity Add (activity_add.xml)
+ * This is the Add view.
+ *
+ * Copyright 2021 Ryan Meneses. The SER423 Instructional Team and Arizona State University
+ * have the right to build and evaluate this software package for the purposes of grading
+ * and program assessment.
+ *
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
+ * @version 1.0
+ * @since November 21, 2021
+ */-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

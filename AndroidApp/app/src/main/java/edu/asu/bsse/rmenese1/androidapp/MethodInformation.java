@@ -5,9 +5,9 @@ package edu.asu.bsse.rmenese1.androidapp;
  *
  * This class is a helper class for AsyncCollectionConnect.java to set up information on the
  * method to be executed asynchronously. Adopted from the in-class project
- * StudentJsonRPCClientViaAsyncTask presented by Tim Lindquist.
+ * StudentJsonRPCClientViaAsyncTask presented by Copyright 2020 Tim Lindquist.
  *
- * @author Ryan Meneses
+ * @author Ryan Meneses     mailto: rmenese1@asu.edu
  * @version 1.0
  * @since November 23, 2021
  */
